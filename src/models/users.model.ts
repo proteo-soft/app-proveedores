@@ -14,12 +14,12 @@ export const Users = sequelize.define("user", {
   },
 
   role: {
-    type: DataTypes.NUMBER,
-    allowNull: false
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
 
   isActive: {
     type: DataTypes.BOOLEAN,
-    allowNull: false
+    allowNull: false,
   },
 });

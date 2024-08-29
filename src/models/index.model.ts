@@ -11,7 +11,10 @@ Products.belongsTo(ProductsPrices);
 
 Products.belongsToMany(PricesLists, { through: ProductsPrices });
 PricesLists.belongsToMany(Products, { through: ProductsPrices });
-ProductsPrices.belongsTo(Products);
-ProductsPrices.belongsTo(PricesLists);
+// ProductsPrices.belongsTo(Products);
+// ProductsPrices.belongsTo(PricesLists);
+
+// Products.hasMany(ProductsPrices);
+// PricesLists.hasMany(ProductsPrices);
 
 export { Users, Products, ProductsPrices, PricesLists };
