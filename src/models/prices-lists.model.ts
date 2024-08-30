@@ -1,6 +1,6 @@
 import sequelize, { DataTypes } from "../database";
 
-export const PricesLists = sequelize.define("prices_lists", {
+export const PricesLists = sequelize.define("list", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,

@@ -1,6 +1,13 @@
 import sequelize, { DataTypes } from "../database";
 
-export const ProductsPrices = sequelize.define("products_prices", {
+export const ProductsPrices = sequelize.define("productsPrices", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+
   productId: {
     type: DataTypes.STRING,
     references: {
@@ -12,7 +19,7 @@ export const ProductsPrices = sequelize.define("products_prices", {
   listId: {
     type: DataTypes.STRING,
     references: {
-      model: "prices_lists",
+      model: "lists",
       key: "id",
     },
   },

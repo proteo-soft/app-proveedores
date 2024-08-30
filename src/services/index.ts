@@ -11,7 +11,10 @@ class ProductsService {
 
   static async getById(id) {
     try {
-      return await Products.findByPk(id);
+      const product = await Products.findByPk(id);
+      const list: any = await PricesLists.findByPk(id);
+
+      return await list.addProduct(product);
     } catch (error) {
       throw error;
     }
@@ -19,7 +22,8 @@ class ProductsService {
 
   static async create(data) {
     try {
-      return await Products.create(data);
+      await PricesLists.create(data);
+      return await Products.create({...data, stock:10});
     } catch (error) {
       throw error;
     }
