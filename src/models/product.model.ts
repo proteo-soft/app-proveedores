@@ -1,4 +1,4 @@
-import sequelize, { DataTypes } from "main/database/connect";
+import sequelize, { DataTypes } from "../database/connect";
 
  const Product = sequelize.define("product", {
   name: {
