@@ -15,14 +15,8 @@ export default class UsersService {
           data: result.error,
           statusCode: 400,
         });
-
-      const userData = {
-        ...(result.data as UserShape),
-        role: 0,
-        isActive: true,
-      };
       
-      return await Users.create(userData);
+      return await Users.create(result.data as UserShape);
     } catch (error) {
       throw error;
     }

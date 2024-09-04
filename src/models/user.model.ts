@@ -1,15 +1,15 @@
-import sequelize, { DataTypes,Model } from "../database/connect";
-import { IUser } from '../interfaces/user.interface';
+import sequelize, { DataTypes, Model } from "../database/connect";
+import { IUser } from "../interfaces/user.interface";
 
-class User extends Model<IUser, Omit<IUser, 'id'>> implements IUser {
-  public fullname!: string;
-  public email!: string;
-  public role!: number;
-  public isActive!: boolean;
+class User extends Model<IUser, Omit<IUser, "id">> implements IUser {
+  declare fullname: string;
+  declare email: string;
+  declare role: number;
+  declare isActive: boolean;
 
   // Timestamps
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 User.init(
@@ -31,17 +31,19 @@ User.init(
     },
     role: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      defaultValue: 0,
     },
     isActive: {
       type: DataTypes.BOOLEAN,
-      allowNull: false
+      allowNull: false,
+      defaultValue: true,
     },
   },
   {
-    sequelize, 
-    modelName: 'User', 
-  },
+    sequelize,
+    modelName: "User",
+  }
 );
 
-export default User
+export default User;
