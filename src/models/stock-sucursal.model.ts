@@ -1,6 +1,6 @@
-import sequelize, { DataTypes } from '../database';
+import sequelize, { DataTypes } from 'main/database/connect';
 
-export const StockSucursal = sequelize.define('stock_sucursal', {
+ const StockSucursal = sequelize.define('stockSucursal', {
     sucursalId: {
         type: DataTypes.STRING,
         references: {
@@ -19,3 +19,5 @@ export const StockSucursal = sequelize.define('stock_sucursal', {
         type: DataTypes.INTEGER,
     }
 });
+
+export default StockSucursal

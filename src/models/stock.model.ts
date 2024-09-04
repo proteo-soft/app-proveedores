@@ -1,3 +1,4 @@
-import sequelize from '../database';
+import sequelize from 'main/database/connect';
 
-export const Stock = sequelize.define('stock', {});
+ const Stock = sequelize.define('stock', {});
+export default Stock

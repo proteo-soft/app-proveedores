@@ -1,8 +1,11 @@
-import sequelize, { DataTypes } from '../database';
+import sequelize, { DataTypes } from 'main/database/connect';
 
-export const Sucursal = sequelize.define('sucursal', {
+const Sucursal = sequelize.define('sucursal', {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
 });
+
+
+export default Sucursal

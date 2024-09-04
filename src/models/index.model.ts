@@ -1,70 +1,37 @@
-import { Auth } from "./auth.model";
-import { Users } from "./users.model";
-import { ClientsSuppliers } from "./clients-suppliers.model";
-import { Categories } from "./categories.model";
-import { Subcategories } from "./subcategories.model";
-import { Products } from "./products.model";
-import { Combos } from "./combos.model";
-import { Sucursal } from "./sucursal.model";
-import { Tickets } from "./tickets.model";
-import { Stock } from "./stock.model";
-import { PricesLists } from "./prices-lists.model";
-import { ProductsCombos } from "./products-combos.model";
-import { ProductsPrices } from "./products-prices.model";
-import { StockSucursal } from "./stock-sucursal.model";
-import { TicketsProducts } from "./tickets-products.model";
+import User from "./user.model";
+import ClientSupplier from "./agent.model";
+import Product from "./product.model";
+import Sucursal from "./sucursal.model";
+import Ticket from "./ticket.model";
+import Stock from "./stock.model";
+import PriceList from "./list.model";
+import ProductPrice from "./product-price.model";
+import StockSucursal from "./stock-sucursal.model";
+import TicketProduct from "./ticket-product.model";
 
-// USERS
+// User
 
-Users.hasMany(Tickets);
-Users.hasOne(Auth);
+User.hasMany(Ticket);
 
 // CLIENTS - SUPPLIERS
 
-ClientsSuppliers.hasMany(Tickets);
-
-// CATEGORIES
-
-Categories.hasMany(Products);
-Categories.hasMany(Subcategories);
-
-// SUBCATEGORIES
-
-Subcategories.hasMany(Products);
-Subcategories.belongsTo(Categories);
+ClientSupplier.hasMany(Ticket);
 
 // SUCURSAL
 
-Sucursal.hasMany(Tickets);
+Sucursal.hasMany(Ticket);
 Sucursal.hasMany(StockSucursal);
 
-// PRODUCTS-COMBOS
+// Product
+Product.belongsTo(ProductPrice);
+Product.belongsTo(TicketProduct);
 
-Combos.belongsToMany(Products, { through: ProductsCombos });
-Products.belongsToMany(Combos, { through: ProductsCombos });
-ProductsCombos.belongsTo(Products);
-ProductsCombos.belongsTo(Combos);
+// Product-PRICES
 
-// PRODUCTS
-
-Products.hasOne(Combos);
-Products.hasMany(ProductsCombos);
-Products.belongsTo(Categories);
-Products.belongsTo(Subcategories);
-Products.belongsTo(ProductsPrices);
-Products.belongsTo(TicketsProducts);
-
-// COMBOS
-
-Combos.hasMany(ProductsCombos);
-Combos.belongsTo(Products);
-
-// PRODUCTS-PRICES
-
-Products.belongsToMany(PricesLists, { through: ProductsPrices });
-PricesLists.belongsToMany(Products, { through: ProductsPrices });
-ProductsPrices.belongsTo(Products);
-ProductsPrices.belongsTo(PricesLists);
+Product.belongsToMany(PriceList, { through: ProductPrice });
+PriceList.belongsToMany(Product, { through: ProductPrice });
+ProductPrice.belongsTo(Product);
+ProductPrice.belongsTo(PriceList);
 
 // STOCK-SUCURSAL
 
@@ -73,29 +40,26 @@ Sucursal.belongsToMany(Stock, { through: StockSucursal });
 StockSucursal.belongsTo(Stock);
 StockSucursal.belongsTo(Sucursal);
 
-// TICKETS
+// TICKET
 
-Tickets.belongsTo(Sucursal);
+Ticket.belongsTo(Sucursal);
 
-// TICKETS-PRODUCTS
+// TICKET-Product
 
-Tickets.belongsToMany(Products, { through: TicketsProducts });
-Products.belongsToMany(Tickets, { through: TicketsProducts });
-TicketsProducts.belongsTo(Tickets);
-TicketsProducts.belongsTo(Products);
+Ticket.belongsToMany(Product, { through: TicketProduct });
+Product.belongsToMany(Ticket, { through: TicketProduct });
+TicketProduct.belongsTo(Ticket);
+TicketProduct.belongsTo(Product);
 
 export {
-  Auth,
-  Users,
-  ClientsSuppliers,
-  Categories,
-  Subcategories,
-  Products,
-  ProductsPrices,
-  PricesLists,
-  Tickets,
-  TicketsProducts,
+  User,
+  ClientSupplier,
+  Product,
+  ProductPrice,
+  PriceList,
+  Ticket,
+  TicketProduct,
   Sucursal,
   Stock,
-  StockSucursal
+  StockSucursal,
 };

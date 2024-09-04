@@ -1,6 +1,6 @@
 import express, { json } from "express";
 
-import indexRouter from "./routes/index";
+import indexRouter from "./routes/index.routes";
 
 import errorHandler from "./middlewares/error-handler";
 
