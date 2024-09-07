@@ -1,22 +1,22 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
-import { IProduct } from "../interfaces/product.interface";
+import { IProduct } from "../interfaces/models/product.interface";
 
 class Product
   extends Model<IProduct, Omit<IProduct, "id">>
   implements IProduct
 {
-  public name!: string;
-  public email!: string;
-  public buy!: boolean;
-  public sell!: boolean;
-  public cost!: number;
-  public isCombo!: boolean;
-  public isService!: boolean;
-  public isActive!: boolean;
+  declare name: string;
+  declare email: string;
+  declare buy: boolean;
+  declare sell: boolean;
+  declare cost: number;
+  declare isCombo: boolean;
+  declare isService: boolean;
+  declare isActive: boolean;
 
   // Timestamps
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 Product.init(

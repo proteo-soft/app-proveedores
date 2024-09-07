@@ -1,7 +1,7 @@
 import Users from "@repositories/users.rep";
 
 import { validateUser, UserShape } from "@utils/schemas";
-import { IUser } from "@interfaces/user.interface";
+import { IUser } from "@interfaces/models/user.interface";
 
 import CustomError from "@utils/errors/customError";
 
@@ -15,7 +15,7 @@ export default class UsersService {
           data: result.error,
           statusCode: 400,
         });
-      
+
       return await Users.create(result.data as UserShape);
     } catch (error) {
       throw error;

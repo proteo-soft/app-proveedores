@@ -1,28 +1,26 @@
-import { IUser } from "../interfaces/user.interface";
-import { IUserDAO } from "../interfaces/user.dao.interface";
-import { UserDAO } from "../DAO/user.dao";
+import { IUser } from "../interfaces/models/user.interface";
+
+import userDAO from "../DAO/user.dao";
 
 class UsersRepository {
-  private static userDAO: IUserDAO = new UserDAO();
-
   static async getById(id: number) {
-    return await this.userDAO.findById(id);
+    return await userDAO.findById(id);
   }
 
   static async getAll(filters) {
-    return await this.userDAO.findAll();
+    return await userDAO.findAll();
   }
 
   static async create(user: IUser) {
-    return await this.userDAO.create(user);
+    return await userDAO.create(user);
   }
 
   static async update(id: number, user: IUser) {
-    return await this.userDAO.update(id, user);
+    return await userDAO.update(id, user);
   }
 
   static async delete(id: number) {
-    return await this.userDAO.delete(id);
+    return await userDAO.delete(id);
   }
 }
 

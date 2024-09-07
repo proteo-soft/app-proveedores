@@ -1,5 +1,5 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
-import { IUser } from "../interfaces/user.interface";
+import { IUser } from "../interfaces/models/user.interface";
 
 class User extends Model<IUser, Omit<IUser, "id">> implements IUser {
   declare fullname: string;
