@@ -1,12 +1,12 @@
 import Users from "@repositories/users.rep";
 
-import { validateUser, UserShape } from "@utils/schemas";
-import { IUser } from "@interfaces/models/user.interface";
+import { validateUser } from "@utils/schemas";
+import { IUser, IUserCreation } from "@interfaces/models/user.interface";
 
 import CustomError from "@utils/errors/customError";
 
 export default class UsersService {
-  static async create(data: IUser) {
+  static async create(data: any) {
     try {
       const result = validateUser(data);
       if (!result.success)
@@ -16,7 +16,7 @@ export default class UsersService {
           statusCode: 400,
         });
 
-      return await Users.create(result.data as UserShape);
+      return await Users.create(result.data as IUserCreation);
     } catch (error) {
       throw error;
     }
@@ -24,33 +24,15 @@ export default class UsersService {
 
   static async getAll(opt) {
     try {
-      const { limit, offset, fullname, ...where } = opt;
-
-      if (!limit || limit > 50) opt.limit = 50;
-      if (!offset) opt.offset = 0;
-
-      const filters = {
-        limit: opt.limit,
-        offset: opt.offset,
-        where: where,
-      };
-
-      // if (fullname) parte del repo
-      //   filters.where.fullname = {
-      //     [Op.iLike]: `%${fullname}%`,
-      //   };
-
-      return await Users.getAll(filters);
+      return await Users.getAll(opt);
     } catch (error) {
       throw error;
     }
   }
 
-  static async getByEmail(email) {
+  static async getByEmail(email: string) {
     try {
-      const user = await this.getAll({ email });
-
-      if (!user.rows[0]) throw new Error("Usuario no encontrado");
+      const user = await Users.getByEmail(email);
 
       return user;
     } catch (error) {

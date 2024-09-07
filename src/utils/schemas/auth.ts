@@ -26,6 +26,10 @@ const authSchema = z.object({
     .min(6, { message: "La contraseña debe tener como mínimo 6 caracteres" }),
 });
 
-export function validateAuth(data) {
+type AuthShape = z.infer<typeof authSchema>;
+
+function validateAuth(data) {
   return authSchema.safeParse(data);
 }
+
+export { validateAuth, AuthShape };

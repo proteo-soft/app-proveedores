@@ -1,9 +1,9 @@
-import { IAuth } from "../interfaces/models/auth.interface";
+import { IAuth, IAuthCreation } from "../interfaces/models/auth.interface";
 
 import authDAO from "../DAO/auth.dao";
 
 class AuthRepository {
-  static async create(data: IAuth) {
+  static async create(data: IAuthCreation) {
     try {
       await authDAO.create(data);
     } catch (error) {
@@ -11,9 +11,9 @@ class AuthRepository {
     }
   }
 
-  static async getById(id: string) {
+  static async getById(id: string | number) {
     try {
-      return await authDAO.findById(parseInt(id));
+      return (await authDAO.findById(Number(id))) as IAuth;
     } catch (error) {
       throw error;
     }

@@ -7,9 +7,11 @@ import Users from "../services/users.service";
 
 import { createHash, verifyPassword, genSalt } from "../utils/hash.util";
 import { createToken } from "../utils/jwt.util";
-
-import { validateAuth } from "../utils/schemas";
 import CustomError from "../utils/errors/customError";
+
+import { validateAuth, AuthShape, UserShape } from "../utils/schemas";
+import { IUserCreation, IUser } from "@interfaces/models/user.interface";
+import { IAuthCreation, IAuth } from "@interfaces/models/auth.interface";
 
 passport.use(
   "register",
@@ -19,7 +21,7 @@ passport.use(
       req,
       _email,
       _password,
-      done: (error: Error, user?: {}, opt?) => void
+      done: (error: Error | null, user?: {}, opt?) => void
     ) => {
       try {
         if (req.body.adminPass != process.env.NEWUSER_PASS)
@@ -38,7 +40,7 @@ passport.use(
             statusCode: 400,
           });
 
-        const { data: validateData } = result;
+        const { data: validateData } = result as { data: AuthShape };
         try {
           await Users.getByEmail(validateData.email);
           return done(null, false, {
@@ -50,7 +52,8 @@ passport.use(
         const salt = genSalt();
         const hashPassword = createHash(salt, validateData.password);
 
-        const user = (await Users.create(validateData)).dataValues;
+        const user = (await Users.create(validateData)) as IUser;
+
         await Auth.create({ UserId: user.id, password: hashPassword });
 
         req["token"] = createToken({ email: validateData.email });
@@ -71,18 +74,18 @@ passport.use(
       req,
       email,
       incomingPassword,
-      done: (error: Error, user?: {}, opt?) => void
+      done: (error: Error | null, user?: {}, opt?) => void
     ) => {
       try {
-        let user;
+        let user: IUser;
 
         try {
-          user = (await Users.getByEmail(email)).rows[0];
+          user = await Users.getByEmail(email);
         } catch (error) {
           return done(null, false, { message: "Email incorrecto" });
         }
 
-        const { password } = (await Auth.getById(user["id"])).dataValues;
+        const { password } = await Auth.getById(user.id);
 
         const [storedSalt] = password.split(":");
 
@@ -108,14 +111,14 @@ passport.use(
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req) => req?.cookies["token"],
       ]),
-      secretOrKey: process.env.JWT_SECRET,
+      secretOrKey: process.env.JWT_SECRET as string,
     },
     async (payload, done) => {
       try {
         let user;
 
         try {
-          user = (await Users.getByEmail(payload.email)).rows[0];
+          user = await Users.getByEmail(payload.email);
         } catch (error) {
           return done(null, false, { message: "Invalid token" });
         }

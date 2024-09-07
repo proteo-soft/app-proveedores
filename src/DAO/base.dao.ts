@@ -1,9 +1,4 @@
-import {
-  CreationAttributes,
-  Model,
-  ModelStatic,
-  WhereOptions,
-} from "sequelize";
+import { Attributes, Model, ModelStatic, WhereOptions } from "sequelize";
 
 export abstract class BaseDAO<T extends Model> {
   private model: ModelStatic<T>;
@@ -16,11 +11,11 @@ export abstract class BaseDAO<T extends Model> {
     return await this.model.findByPk(id);
   }
 
-  async findAll() {
-    return await this.model.findAndCountAll();
+  async findAll(filters) {
+    return await this.model.findAndCountAll(filters);
   }
 
-  async create(user: CreationAttributes<T>) {
+  async create(user: Attributes<T>) {
     return await this.model.create(user);
   }
 

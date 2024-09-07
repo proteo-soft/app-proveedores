@@ -1,8 +1,10 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
-import { IAuth } from "../interfaces/models/auth.interface";
+import { IAuth, IAuthCreation } from "../interfaces/models/auth.interface";
 
-class Auth extends Model<IAuth, Omit<IAuth, "id">> implements IAuth {
+class Auth extends Model implements IAuthCreation {
+  declare id: number;
   declare password: string;
+  declare UserId: number;
 
   // Timestamps
   declare readonly createdAt: Date;
