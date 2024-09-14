@@ -72,13 +72,17 @@ const productsSchema = z.object({
     })
     .optional(),
 
-  CategoryId: z.number({
-    invalid_type_error: "CategoryId debe ser de tipo numérico",
-  }),
+  categoryId: z
+    .number({
+      invalid_type_error: "CategoryId debe ser de tipo numérico",
+    })
+    .optional(),
 
-  SubcategoryId: z.number({
-    invalid_type_error: "SubcategoryId debe ser de tipo numérico",
-  }),
+  subcategoryId: z
+    .number({
+      invalid_type_error: "SubcategoryId debe ser de tipo numérico",
+    })
+    .optional(),
 });
 
 export function validateProduct(data) {

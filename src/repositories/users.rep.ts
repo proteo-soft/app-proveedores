@@ -1,18 +1,18 @@
 import { IUserCreation, IUser } from "../interfaces/models/user.interface";
 
-import userDAO from "../DAO/user.dao";
+import users from "../DAO/user.dao";
 
 import { filterBuilder } from "@utils/filter-builder.util";
 
 class UsersRepository {
   static async getById(id: number) {
-    return await userDAO.findById(id);
+    return await users.findById(id);
   }
 
   static async getAll(opt) {
     const filters = filterBuilder(opt);
 
-    return await userDAO.findAll(filters);
+    return await users.findAll(filters);
   }
 
   static async getByEmail(email: string) {
@@ -27,16 +27,16 @@ class UsersRepository {
     }
   }
 
-  static async create(user: IUserCreation) {
-    return (await userDAO.create(user)).dataValues as IUser;
+  static async create(data: IUserCreation) {
+    return (await users.create(data)).dataValues as IUser;
   }
 
-  static async update(id: number, user: IUser) {
-    return await userDAO.update(id, user);
+  static async update(id: number, data: IUser) {
+    return await users.update(id, data);
   }
 
   static async delete(id: number) {
-    return await userDAO.delete(id);
+    return await users.delete(id);
   }
 }
 

@@ -2,8 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import Sucursal from "@services/sucursal.service";
 
 class SucursalController {
-  static create(data) {
+  static async create(req, res) {
     try {
+      await Sucursal.create(req.body);
+
+      res.json({ message: "sucursal creada" });
     } catch (error) {}
   }
 

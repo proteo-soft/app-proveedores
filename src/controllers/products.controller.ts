@@ -2,9 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import Products from "@services/products.service";
 
 class ProductsController {
-  static create(data) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
-    } catch (error) {}
+      await Products.create(req.body);
+
+      res.status(201).json({ message: "Producto creado exitosamente" });
+    } catch (error) {
+      next(error);
+    }
   }
 
   static read() {

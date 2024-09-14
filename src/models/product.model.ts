@@ -4,7 +4,6 @@ import { IProductCreation } from "../interfaces/models/product.interface";
 class Product extends Model implements IProductCreation {
   declare id: number;
   declare name: string;
-  declare email: string;
   declare buy: boolean;
   declare sell: boolean;
   declare cost: number;
@@ -62,7 +61,7 @@ Product.init(
   },
   {
     sequelize,
-    modelName: "User",
+    modelName: "Product",
   }
 );
 

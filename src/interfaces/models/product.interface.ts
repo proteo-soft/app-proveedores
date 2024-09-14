@@ -1,5 +1,6 @@
 export interface IProductCreation {
   name: string;
+  stock?: number;
   cost?: number;
   sell?: boolean;
   buy?: boolean;
@@ -8,8 +9,9 @@ export interface IProductCreation {
   isActive?: boolean;
 }
 
-export interface IProduct {
+export interface IProduct extends IProductCreation {
   id: number;
+  stock: number;
   cost: number;
   sell: boolean;
   buy: boolean;
