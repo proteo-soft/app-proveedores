@@ -1,10 +1,8 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
-import { IProduct } from "../interfaces/models/product.interface";
+import { IProductCreation } from "../interfaces/models/product.interface";
 
-class Product
-  extends Model<IProduct, Omit<IProduct, "id">>
-  implements IProduct
-{
+class Product extends Model implements IProductCreation {
+  declare id: number;
   declare name: string;
   declare email: string;
   declare buy: boolean;

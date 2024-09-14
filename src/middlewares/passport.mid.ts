@@ -9,9 +9,8 @@ import { createHash, verifyPassword, genSalt } from "../utils/hash.util";
 import { createToken } from "../utils/jwt.util";
 import CustomError from "../utils/errors/customError";
 
-import { validateAuth, AuthShape, UserShape } from "../utils/schemas";
-import { IUserCreation, IUser } from "@interfaces/models/user.interface";
-import { IAuthCreation, IAuth } from "@interfaces/models/auth.interface";
+import { validateAuth, AuthShape } from "../utils/schemas";
+import { IUser } from "@interfaces/models/user.interface";
 
 passport.use(
   "register",
@@ -52,7 +51,8 @@ passport.use(
         const salt = genSalt();
         const hashPassword = createHash(salt, validateData.password);
 
-        const user = (await Users.create(validateData)) as IUser;
+        const { password, ...userData } = validateData;
+        const user = (await Users.create(userData)) as IUser;
 
         await Auth.create({ UserId: user.id, password: hashPassword });
 

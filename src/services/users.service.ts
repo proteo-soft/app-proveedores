@@ -6,7 +6,7 @@ import { IUser, IUserCreation } from "@interfaces/models/user.interface";
 import CustomError from "@utils/errors/customError";
 
 export default class UsersService {
-  static async create(data: any) {
+  static async create(data: IUserCreation) {
     try {
       const result = validateUser(data);
       if (!result.success)

@@ -19,7 +19,8 @@ const productsSchema = z.object({
     .nonnegative({
       message: "El stock tiene que ser positivo",
     })
-    .int(),
+    .int()
+    .optional(),
 
   cost: z
     .number({
@@ -28,7 +29,8 @@ const productsSchema = z.object({
     })
     .nonnegative({
       message: "El costo debe ser positivo",
-    }),
+    })
+    .optional(),
 
   profit: z
     .number({
@@ -37,42 +39,38 @@ const productsSchema = z.object({
     })
     .nonnegative({
       message: "La ganancia debe ser positiva",
-    }),
+    })
+    .optional(),
 
   buy: z
     .boolean({
       invalid_type_error: "buy debe ser de tipo booleano",
     })
-    .optional()
-    .default(true),
+    .optional(),
 
   sell: z
     .boolean({
       invalid_type_error: "sell debe ser de tipo booleano",
     })
-    .optional()
-    .default(true),
+    .optional(),
 
   isService: z
     .boolean({
       invalid_type_error: "isService debe ser de tipo booleano",
     })
-    .optional()
-    .default(true),
+    .optional(),
 
   isCombo: z
     .boolean({
       invalid_type_error: "isCombo debe ser de tipo booleano",
     })
-    .optional()
-    .default(false),
+    .optional(),
 
   isActive: z
     .boolean({
       invalid_type_error: "isActive debe ser de tipo booleano",
     })
-    .optional()
-    .default(true),
+    .optional(),
 
   CategoryId: z.number({
     invalid_type_error: "CategoryId debe ser de tipo numérico",

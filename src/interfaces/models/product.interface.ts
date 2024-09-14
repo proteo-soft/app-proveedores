@@ -1,11 +1,19 @@
+export interface IProductCreation {
+  name: string;
+  cost?: number;
+  sell?: boolean;
+  buy?: boolean;
+  isService?: boolean;
+  isCombo?: boolean;
+  isActive?: boolean;
+}
+
 export interface IProduct {
-    id?: number;
-    name:string,
-    cost:number,
-    sell?:boolean,
-    buy?:boolean,
-    isService?:boolean
-    isCombo?:boolean
-    isActive?:boolean
-  }
-  
+  id: number;
+  cost: number;
+  sell: boolean;
+  buy: boolean;
+  isService: boolean;
+  isCombo: boolean;
+  isActive: boolean;
+}
