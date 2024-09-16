@@ -10,33 +10,53 @@ import { filterBuilder } from "@utils/filter-builder.util";
 
 class ProductsRepository {
   static async getById(id: number) {
-    return await products.findById(id);
+    try {
+      return await products.findById(id);
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async getAll(opt) {
-    const filters = filterBuilder(opt);
+    try {
+      const filters = filterBuilder(opt);
 
-    return await products.findAll(filters);
+      return await products.findAll(filters);
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async create(data: IProductCreation) {
-    const { stock, ...productData } = data;
-    const newProduct = await products.create(productData); // ver si arrojar error desde el dao
+    try {
+      const { stock, ...productData } = data;
+      const newProduct = await products.create(productData);
 
-    const suc1 = await sucursal.findById(1); // ver si combiene que el usuario tenga una sucursal asignada en la tabla users para que no haya que constantemente mandarle la sucursal
-    const product = (await products.findById(newProduct.id)) as any; // ver si puedo hacer una interfaz para el dao particular del producto
+      const suc1 = (await sucursal.findById(1))!; // ver si combiene que el usuario tenga una sucursal asignada en la tabla users para que no haya que constantemente mandarle la sucursal
+      const product = (await products.findById(newProduct.id))!; // ver si puedo hacer una interfaz para el dao particular del producto
 
-    const stockSuc1 = await product["addSucursal"](suc1, {
-      through: { stock },
-    }); // ver como agregar el metodo a la interfaz del producto
+      await product.addSucursal(suc1, {
+        through: { stock },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async update(id: number, data: IProduct) {
-    return await products.update(id, data);
+    try {
+      return await products.update(id, data);
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async delete(id: number) {
-    return await products.delete(id);
+    try {
+      return await products.delete(id);
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

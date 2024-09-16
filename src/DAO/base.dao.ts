@@ -1,4 +1,5 @@
 import { Attributes, Model, ModelStatic, WhereOptions } from "sequelize";
+import CustomError from "@utils/errors/customError";
 
 export abstract class BaseDAO<T extends Model> {
   private model: ModelStatic<T>;
@@ -8,28 +9,73 @@ export abstract class BaseDAO<T extends Model> {
   }
 
   async findById(id: number) {
-    return await this.model.findByPk(id);
+    try {
+      const data = await this.model.findByPk(id);
+      if (!data)
+        CustomError.new({
+          message: "No existe información para mostrar",
+          data: "",
+          statusCode: 404,
+        });
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async findAll(filters) {
-    return await this.model.findAndCountAll(filters);
+    try {
+      const data = await this.model.findAndCountAll(filters);
+      if (data.count == 0)
+        CustomError.new({
+          message: "No existe información para mostrar",
+          data: "",
+          statusCode: 404,
+        });
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async create(user: Attributes<T>) {
-    return await this.model.create(user);
+    try {
+      return await this.model.create(user);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async update(id: number, model: Partial<T>) {
-    const [affectedRows] = await this.model.update(model, {
-      where: { id } as WhereOptions,
-    });
+    try {
+      const [affectedRows] = await this.model.update(model, {
+        where: { id } as WhereOptions,
+      });
 
-    return affectedRows;
+      return affectedRows;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async delete(id: number) {
-    return await this.model.destroy({
-      where: { id } as WhereOptions,
-    });
+    try {
+      const affectedCount = await this.model.destroy({
+        where: { id } as WhereOptions,
+      });
+
+      if (affectedCount == 0)
+        CustomError.new({
+          message: "No se encontró el elemento solicitado",
+          data: "",
+          statusCode: 404,
+        });
+
+      return affectedCount;
+    } catch (error) {
+      throw error;
+    }
   }
 }
