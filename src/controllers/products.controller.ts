@@ -12,8 +12,11 @@ class ProductsController {
     }
   }
 
-  static read() {
+  static async read(req, res) {
     try {
+      const products = await Products.getAll({});
+
+      res.status(200).json({ data: products });
     } catch (error) {}
   }
 
@@ -22,13 +25,19 @@ class ProductsController {
     } catch (error) {}
   }
 
-  static update(id, data) {
+  static async update(req, res) {
     try {
+      const products = await Products.updateById(req.params.id, req.body);
+
+      res.status(200).json({ data: products });
     } catch (error) {}
   }
 
-  static delete(id) {
+  static async delete(req, res) {
     try {
+      const products = await Products.deleteById(req.params.id);
+
+      res.status(200).json({ data: products });
     } catch (error) {}
   }
 }

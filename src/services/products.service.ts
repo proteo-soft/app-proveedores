@@ -41,8 +41,12 @@ export default class UsersService {
     }
   }
 
-  static async updateById(id: string, data: IProduct) {
+  static async updateById(id: string, data) {
     try {
+      if (data.stock) {
+        Products.updateStock(data.sucursalId, parseInt(id), data.stock);
+      }
+
       return await Products.update(parseInt(id), data);
     } catch (error) {
       throw error;

@@ -1,7 +1,17 @@
-import sequelize, { DataTypes } from "../database/connect";
+import sequelize, { DataTypes, Model } from "../database/connect";
 
-const Stock = sequelize.define(
-  "Stock",
+import { IStock } from "../interfaces/models/stock.interface";
+
+class Stock extends Model implements IStock {
+  declare id: number;
+  declare stock: number;
+
+  // Timestamps
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
+}
+
+Stock.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -13,6 +23,8 @@ const Stock = sequelize.define(
     stock: DataTypes.INTEGER,
   },
   {
+    sequelize,
+    modelName: "Stock",
     freezeTableName: true,
   }
 );

@@ -10,8 +10,8 @@ import Stock from "./stock.model";
 
 // STOCK - SUCURSAL
 
-Product.belongsToMany(Sucursal, { through: Stock });
-Sucursal.belongsToMany(Product, { through: Stock });
+Product.belongsToMany(Sucursal, { through: Stock, onDelete: "CASCADE" });
+Sucursal.belongsToMany(Product, { through: Stock, onDelete: "CASCADE" });
 
 export {
   User,

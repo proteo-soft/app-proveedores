@@ -2,15 +2,35 @@ import { Attributes, Model, ModelStatic, WhereOptions } from "sequelize";
 import CustomError from "@utils/errors/customError";
 
 export abstract class BaseDAO<T extends Model> {
-  private model: ModelStatic<T>;
+  private _model: ModelStatic<T>;
+
+  get model() {
+    return this._model;
+  }
 
   constructor(model: ModelStatic<T>) {
-    this.model = model;
+    this._model = model;
+  }
+
+  async findOne(filters) {
+    try {
+      const data = await this._model.findOne(filters);
+      if (!data)
+        CustomError.new({
+          message: "No existe información para mostrar",
+          data: "",
+          statusCode: 404,
+        });
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async findById(id: number) {
     try {
-      const data = await this.model.findByPk(id);
+      const data = await this._model.findByPk(id);
       if (!data)
         CustomError.new({
           message: "No existe información para mostrar",
@@ -26,7 +46,8 @@ export abstract class BaseDAO<T extends Model> {
 
   async findAll(filters) {
     try {
-      const data = await this.model.findAndCountAll(filters);
+      const data = await this._model.findAndCountAll(filters);
+
       if (data.count == 0)
         CustomError.new({
           message: "No existe información para mostrar",
@@ -42,7 +63,7 @@ export abstract class BaseDAO<T extends Model> {
 
   async create(user: Attributes<T>) {
     try {
-      return await this.model.create(user);
+      return await this._model.create(user);
     } catch (error) {
       throw error;
     }
@@ -50,7 +71,7 @@ export abstract class BaseDAO<T extends Model> {
 
   async update(id: number, model: Partial<T>) {
     try {
-      const [affectedRows] = await this.model.update(model, {
+      const [affectedRows] = await this._model.update(model, {
         where: { id } as WhereOptions,
       });
 
@@ -62,7 +83,7 @@ export abstract class BaseDAO<T extends Model> {
 
   async delete(id: number) {
     try {
-      const affectedCount = await this.model.destroy({
+      const affectedCount = await this._model.destroy({
         where: { id } as WhereOptions,
       });
 
