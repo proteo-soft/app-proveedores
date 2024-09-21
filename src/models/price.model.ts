@@ -23,7 +23,7 @@ Price.init(
       allowNull: false,
     },
 
-    ProductId: {
+    productId: {
       type: DataTypes.INTEGER,
       references: {
         model: Product,
@@ -32,7 +32,7 @@ Price.init(
       allowNull: false,
     },
 
-    ListId: {
+    listId: {
       type: DataTypes.INTEGER,
       references: {
         model: List,

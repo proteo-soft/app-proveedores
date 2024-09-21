@@ -23,7 +23,7 @@ TicketProduct.init(
       allowNull: false,
     },
 
-    TicketId: {
+    ticketId: {
       type: DataTypes.INTEGER,
       references: {
         model: Ticket,
@@ -33,7 +33,7 @@ TicketProduct.init(
       allowNull: false,
     },
 
-    ProductId: {
+    productId: {
       type: DataTypes.INTEGER,
       references: {
         model: Product,

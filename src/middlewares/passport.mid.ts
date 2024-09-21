@@ -2,8 +2,8 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 
-import Auth from "../services/auth.service";
 import Users from "../services/users.service";
+import Auth from "../services/auth.service";
 
 import { createHash, verifyPassword, genSalt } from "../utils/hash.util";
 import { createToken } from "../utils/jwt.util";

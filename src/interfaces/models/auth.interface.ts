@@ -1,6 +1,6 @@
 export interface IAuthCreation {
   password: string;
-  UserId: number;
+  userId: number;
 }
 
 export interface IAuth extends IAuthCreation {

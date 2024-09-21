@@ -1,4 +1,7 @@
 import { Router } from "express";
+
+import "@models/index.model"; // El interprete lee primero el modelo auth y quiere importar users de index.model(que todavía no cargó) y exporta a User(index) como undefined
+
 import auth from "./auth.route";
 import users from "./users.route";
 import tickets from "./tickets.route";

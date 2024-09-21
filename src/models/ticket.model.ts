@@ -1,11 +1,11 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
 import { ITicketCreation } from "../interfaces/models/ticket.interface";
-import { Sucursal, User, Agent } from "./index.model";
+import { Sucursal, User, Agent, Price } from "./index.model";
 
 class Ticket extends Model implements ITicketCreation {
   declare id: number;
   declare SucursalId: number;
-  declare ProductId: number;
+  declare PriceId: number;
   declare UserId: number;
   declare AgentId: number;
   declare type: string;
@@ -24,7 +24,7 @@ Ticket.init(
       allowNull: false,
     },
 
-    SucursalId: {
+    sucursalId: {
       type: DataTypes.INTEGER,
       references: {
         model: Sucursal,
@@ -34,20 +34,28 @@ Ticket.init(
       allowNull: false,
     },
 
-    AgentId: {
+    agentId: {
       type: DataTypes.INTEGER,
       references: {
         model: Agent,
         key: "id",
       },
-
       allowNull: false,
     },
 
-    UserId: {
+    userId: {
       type: DataTypes.INTEGER,
       references: {
         model: User,
+        key: "id",
+      },
+      allowNull: false,
+    },
+
+    listPriceId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Price,
         key: "id",
       },
       allowNull: false,

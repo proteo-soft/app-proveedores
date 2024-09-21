@@ -23,7 +23,7 @@ Stock.init(
       allowNull: false,
     },
 
-    ProductId: {
+    productId: {
       type: DataTypes.INTEGER,
       references: {
         model: Product,
@@ -32,7 +32,7 @@ Stock.init(
       allowNull: false,
     },
 
-    SucursalId: {
+    sucursalId: {
       type: DataTypes.INTEGER,
       references: {
         model: Sucursal,
