@@ -1,5 +1,5 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
-import { IUser, IUserCreation } from "../interfaces/models/user.interface";
+import { IUserCreation } from "../interfaces/models/user.interface";
 
 class User extends Model implements IUserCreation {
   declare id: number;
@@ -20,7 +20,7 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    fullname: {
+    fullName: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,

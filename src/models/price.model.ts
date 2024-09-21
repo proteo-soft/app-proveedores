@@ -1,20 +1,20 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
+import { Product, List } from "./index.model";
 
-import { IStock } from "../interfaces/models/stock.interface";
-import { Product, Sucursal } from "./index.model";
+import { IPriceCreation } from "@interfaces/models/price.interface";
 
-class Stock extends Model implements IStock {
+class Price extends Model implements IPriceCreation {
   declare id: number;
-  declare stock: number;
+  declare ListId: number;
   declare ProductId: number;
-  declare SucursalId: number;
+  declare price: number;
 
   // Timestamps
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 }
 
-Stock.init(
+Price.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -32,22 +32,25 @@ Stock.init(
       allowNull: false,
     },
 
-    SucursalId: {
+    ListId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Sucursal,
+        model: List,
         key: "id",
       },
       allowNull: false,
     },
 
-    stock: DataTypes.INTEGER,
+    price: {
+      type: DataTypes.DOUBLE,
+      allowNull: false,
+      defaultValue: 0,
+    },
   },
   {
     sequelize,
-    modelName: "Stock",
-    freezeTableName: true,
+    modelName: "Price",
   }
 );
 
-export default Stock;
+export default Price;
