@@ -1,6 +1,4 @@
-import { config } from "dotenv";
-config();
-
+import "@utils/env-action.util";
 import app from "./app";
 
 const PORT = process.env.PORT;
