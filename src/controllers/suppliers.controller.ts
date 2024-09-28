@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import SuppliersService from "@services/suppliers";
 
 class SuppliersController {
   static create(data) {

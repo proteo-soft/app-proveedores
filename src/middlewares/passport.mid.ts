@@ -54,7 +54,7 @@ passport.use(
         const { password, ...userData } = validateData;
         const user = (await Users.create(userData)) as IUser;
 
-        await Auth.create({ UserId: user.id, password: hashPassword });
+        await Auth.create({ userId: user.id, password: hashPassword });
 
         req["token"] = createToken({ email: validateData.email });
 

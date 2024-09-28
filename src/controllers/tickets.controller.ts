@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import Tickets from "@services/tickets.service";
 
 class TicketsController {
   static create(data) {
