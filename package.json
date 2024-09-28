@@ -16,7 +16,7 @@
     "sync": "ts-node ./src/database/sync.ts",
     "dev": "tsnd --respawn --transpile-only -r tsconfig-paths/register ./src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node ./dist/index.js"
   },
   "keywords": [],
   "author": "",
