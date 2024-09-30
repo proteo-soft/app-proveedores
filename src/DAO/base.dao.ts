@@ -69,10 +69,10 @@ export abstract class BaseDAO<T extends Model> {
     }
   }
 
-  async update(id: number, model: Partial<T>) {
+  async update(where: WhereOptions, data: Partial<T>) {
     try {
-      const [affectedRows] = await this._model.update(model, {
-        where: { id } as WhereOptions,
+      const [affectedRows] = await this._model.update(data, {
+        where,
       });
 
       return affectedRows;

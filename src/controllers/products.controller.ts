@@ -27,6 +27,14 @@ class ProductsController {
 
   static async update(req, res) {
     try {
+      const products = await Products.update(req.body);
+
+      res.status(200).json({ data: products });
+    } catch (error) {}
+  }
+
+  static async updateById(req, res) {
+    try {
       const products = await Products.updateById(req.params.id, req.body);
 
       res.status(200).json({ data: products });

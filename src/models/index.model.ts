@@ -28,20 +28,44 @@ Sucursal.hasMany(Ticket, { foreignKey: "sucursalId" });
 
 // STOCK
 
-Product.belongsToMany(Sucursal, { through: Stock, onDelete: "CASCADE" });
-Sucursal.belongsToMany(Product, { through: Stock, onDelete: "CASCADE" });
+Product.belongsToMany(Sucursal, {
+  through: Stock,
+  onDelete: "CASCADE",
+  foreignKey: "sucursalId",
+});
+Sucursal.belongsToMany(Product, {
+  through: Stock,
+  onDelete: "CASCADE",
+  foreignKey: "productId",
+});
 
 // PRICES
 
-Product.belongsToMany(List, { through: Price, onDelete: "CASCADE" });
-List.belongsToMany(Product, { through: Price, onDelete: "CASCADE" });
+Product.belongsToMany(List, {
+  through: Price,
+  onDelete: "CASCADE",
+  foreignKey: "productId",
+});
+List.belongsToMany(Product, {
+  through: Price,
+  onDelete: "CASCADE",
+  foreignKey: "listId",
+});
 
 Price.hasMany(Ticket, { foreignKey: "listPriceId" });
 
 // TICKET-PRODUCT
 
-Product.belongsToMany(Ticket, { through: TicketProduct, onDelete: "CASCADE" });
-Ticket.belongsToMany(Product, { through: TicketProduct, onDelete: "CASCADE" });
+Product.belongsToMany(Ticket, {
+  through: TicketProduct,
+  onDelete: "CASCADE",
+  foreignKey: "productId",
+});
+Ticket.belongsToMany(Product, {
+  through: TicketProduct,
+  onDelete: "CASCADE",
+  foreignKey: "ticketId",
+});
 
 // TICKET
 
