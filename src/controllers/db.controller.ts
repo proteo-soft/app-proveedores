@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import sequelize from "src/database/connect";
+import sequelize from "../database/connect";
 
 class DbController {
   static async sync(req: Request, res: Response, next: NextFunction) {
