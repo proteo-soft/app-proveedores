@@ -11,4 +11,6 @@ export interface IProductCreation {
 
 export interface IProduct extends IProductCreation {
   id: number;
+  sizeId: number;
+  colorId: number;
 }

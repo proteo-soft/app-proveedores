@@ -3,6 +3,8 @@ import Auth from "./auth.model";
 import Agent from "./agent.model";
 import Sucursal from "./sucursal.model";
 import Product from "./product.model";
+import Color from "./color.model";
+import Size from "./size.model";
 import List from "./list.model";
 import Price from "./price.model";
 import Stock from "./stock.model";
@@ -26,6 +28,19 @@ Agent.hasMany(Ticket);
 
 Sucursal.hasMany(Ticket);
 
+// SIZE
+
+Size.hasMany(Product);
+
+// COLOR
+
+Color.hasMany(Product);
+
+// PRODUCT
+
+Product.belongsTo(Size);
+Product.belongsTo(Color);
+
 // STOCK
 
 Product.belongsToMany(Sucursal, {
@@ -37,7 +52,7 @@ Sucursal.belongsToMany(Product, {
   onDelete: "CASCADE",
 });
 
-// PRICES
+// PRICE
 
 Product.belongsToMany(List, {
   through: Price,

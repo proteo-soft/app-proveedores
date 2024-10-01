@@ -1,7 +1,6 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
 
 import { ISucursalCreation } from "../interfaces/models/sucursal.interface";
-import { IStock } from "@interfaces/models/stock.interface";
 
 import Product from "./product.model";
 
