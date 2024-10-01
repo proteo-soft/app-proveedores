@@ -135,7 +135,7 @@ class ProductsRepository {
 
   static async delete(id: number) {
     try {
-      return await products.delete(id);
+      return await products.delete({ id });
     } catch (error) {
       throw error;
     }
