@@ -32,11 +32,11 @@ class UsersRepository {
   }
 
   static async update(id: number, data: IUser) {
-    return await users.update(id, data);
+    return await users.update({ id }, data);
   }
 
   static async delete(id: number) {
-    return await users.delete(id);
+    return await users.delete({ id });
   }
 }
 

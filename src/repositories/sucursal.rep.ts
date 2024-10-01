@@ -36,7 +36,7 @@ class SucursalRepository {
 
   static async update(id: number, data: ISucursal) {
     try {
-      return await sucursal.update(id, data);
+      return await sucursal.update({ id }, data);
     } catch (error) {
       throw error;
     }
@@ -44,7 +44,7 @@ class SucursalRepository {
 
   static async delete(id: number) {
     try {
-      return await sucursal.delete(id);
+      return await sucursal.delete({ id });
     } catch (error) {
       throw error;
     }

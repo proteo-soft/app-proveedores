@@ -81,10 +81,10 @@ export abstract class BaseDAO<T extends Model> {
     }
   }
 
-  async delete(id: number) {
+  async delete(where: WhereOptions) {
     try {
       const affectedCount = await this._model.destroy({
-        where: { id } as WhereOptions,
+        where,
       });
 
       if (affectedCount == 0)
