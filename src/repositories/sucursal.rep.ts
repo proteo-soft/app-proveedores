@@ -9,25 +9,45 @@ import { filterBuilder } from "@utils/filter-builder.util";
 
 class SucursalRepository {
   static async getById(id: number) {
-    return await sucursal.findById(id);
+    try {
+      return await sucursal.findById(id);
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async getAll(opt) {
-    const filters = filterBuilder(opt);
+    try {
+      const filters = filterBuilder(opt);
 
-    return await sucursal.findAll(filters);
+      return await sucursal.findAll(filters);
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async create(data: ISucursalCreation) {
-    return (await sucursal.create(data)).dataValues as ISucursal;
+    try {
+      return await sucursal.create(data);
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async update(id: number, data: ISucursal) {
-    return await sucursal.update(id, data);
+    try {
+      return await sucursal.update(id, data);
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async delete(id: number) {
-    return await sucursal.delete(id);
+    try {
+      return await sucursal.delete(id);
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

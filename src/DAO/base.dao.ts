@@ -61,9 +61,9 @@ export abstract class BaseDAO<T extends Model> {
     }
   }
 
-  async create(user: Attributes<T>) {
+  async create(data: Attributes<T>) {
     try {
-      return await this._model.create(user);
+      return await this._model.create(data);
     } catch (error) {
       throw error;
     }

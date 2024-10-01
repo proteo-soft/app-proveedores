@@ -48,7 +48,7 @@ TicketProduct.init(
   },
   {
     sequelize,
-    modelName: "TicketsProducts",
+    modelName: "ticketsProducts",
     freezeTableName: true,
   }
 );

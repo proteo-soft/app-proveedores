@@ -14,7 +14,10 @@ class Product extends Model implements IProductCreation {
   declare isCombo: boolean;
   declare isService: boolean;
   declare isActive: boolean;
-  declare addSucursal: (sucursal: Sucursal, opt: { through: IStock }) => {};
+  declare addSucursal: (
+    sucursal: Sucursal,
+    opt: { through: { stock: number } }
+  ) => {};
 
   // Timestamps
   declare readonly createdAt: Date;
@@ -66,7 +69,7 @@ Product.init(
   },
   {
     sequelize,
-    modelName: "Product",
+    modelName: "product",
   }
 );
 

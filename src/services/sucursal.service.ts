@@ -21,6 +21,8 @@ export default class SucursalService {
 
       return await Sucursal.create(result.data as ISucursalCreation);
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }

@@ -39,13 +39,13 @@ class ProductsRepository {
 
   static async create(data: IProductCreation) {
     try {
-      const { stock, ...productData } = data;
-      const newProduct = await products.create(productData);
+      const { stock: units, ...productData } = data;
 
       const suc1 = (await sucursal.findById(1))!; // ver si combiene que el usuario tenga una sucursal asignada en la tabla users para que no haya que constantemente mandarle la sucursal
-      const product = (await products.findById(newProduct.id))!;
-      await product.addSucursal(suc1, {
-        through: { stock },
+      const newProduct = await products.create(productData);
+
+      suc1.addProduct(newProduct, {
+        through: { stock: units },
       });
     } catch (error) {
       throw error;
@@ -60,7 +60,7 @@ class ProductsRepository {
   ) {
     try {
       const updates = {};
-      updates[prop] = data; // le digo la propiedad a actualizar de la join table
+      updates[prop] = data; // le indico la propiedad a actualizar de la join table
 
       const affectedRows = await model.update(where, updates);
 

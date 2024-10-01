@@ -38,7 +38,7 @@ Auth.init(
   },
   {
     sequelize,
-    modelName: "Auth",
+    modelName: "auth",
     freezeTableName: true,
   }
 );
