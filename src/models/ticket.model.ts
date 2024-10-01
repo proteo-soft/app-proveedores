@@ -70,7 +70,7 @@ Ticket.init(
   },
   {
     sequelize,
-    modelName: "Ticket",
+    modelName: "ticket",
   }
 );
 

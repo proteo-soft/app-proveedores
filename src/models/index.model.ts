@@ -11,44 +11,62 @@ import TicketProduct from "./ticket-product.model";
 
 // USER
 
-User.hasMany(Ticket, { foreignKey: "userId" });
-User.hasMany(Auth, { foreignKey: "userId" });
+User.hasMany(Ticket);
+User.hasMany(Auth);
 
 // AUTH
 
-Auth.belongsTo(User, { foreignKey: "authId" });
+Auth.belongsTo(User);
 
 // AGENT
 
-Agent.hasMany(Ticket, { foreignKey: "agentId" });
+Agent.hasMany(Ticket);
 
 // SUCURSAL
 
-Sucursal.hasMany(Ticket, { foreignKey: "sucursalId" });
+Sucursal.hasMany(Ticket);
 
 // STOCK
 
-Product.belongsToMany(Sucursal, { through: Stock, onDelete: "CASCADE" });
-Sucursal.belongsToMany(Product, { through: Stock, onDelete: "CASCADE" });
+Product.belongsToMany(Sucursal, {
+  through: Stock,
+  onDelete: "CASCADE",
+});
+Sucursal.belongsToMany(Product, {
+  through: Stock,
+  onDelete: "CASCADE",
+});
 
 // PRICES
 
-Product.belongsToMany(List, { through: Price, onDelete: "CASCADE" });
-List.belongsToMany(Product, { through: Price, onDelete: "CASCADE" });
+Product.belongsToMany(List, {
+  through: Price,
+  onDelete: "CASCADE",
+});
+List.belongsToMany(Product, {
+  through: Price,
+  onDelete: "CASCADE",
+});
 
-Price.hasMany(Ticket, { foreignKey: "listPriceId" });
+Price.hasMany(Ticket);
 
 // TICKET-PRODUCT
 
-Product.belongsToMany(Ticket, { through: TicketProduct, onDelete: "CASCADE" });
-Ticket.belongsToMany(Product, { through: TicketProduct, onDelete: "CASCADE" });
+Product.belongsToMany(Ticket, {
+  through: TicketProduct,
+  onDelete: "CASCADE",
+});
+Ticket.belongsToMany(Product, {
+  through: TicketProduct,
+  onDelete: "CASCADE",
+});
 
 // TICKET
 
-Ticket.belongsTo(Sucursal, { foreignKey: "ticketId" });
-Ticket.belongsTo(Agent, { foreignKey: "ticketId" });
-Ticket.belongsTo(Price, { foreignKey: "ticketId" });
-Ticket.belongsTo(User, { foreignKey: "ticketId" });
+Ticket.belongsTo(Sucursal);
+Ticket.belongsTo(Agent);
+Ticket.belongsTo(Price);
+Ticket.belongsTo(User);
 
 export {
   User,

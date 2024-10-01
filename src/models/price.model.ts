@@ -49,7 +49,7 @@ Price.init(
   },
   {
     sequelize,
-    modelName: "Price",
+    modelName: "price",
   }
 );
 

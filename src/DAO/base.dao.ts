@@ -61,18 +61,18 @@ export abstract class BaseDAO<T extends Model> {
     }
   }
 
-  async create(user: Attributes<T>) {
+  async create(data: Attributes<T>) {
     try {
-      return await this._model.create(user);
+      return await this._model.create(data);
     } catch (error) {
       throw error;
     }
   }
 
-  async update(id: number, model: Partial<T>) {
+  async update(where: WhereOptions, data: Partial<T>) {
     try {
-      const [affectedRows] = await this._model.update(model, {
-        where: { id } as WhereOptions,
+      const [affectedRows] = await this._model.update(data, {
+        where,
       });
 
       return affectedRows;

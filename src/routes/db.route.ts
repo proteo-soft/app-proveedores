@@ -11,5 +11,6 @@ import Db from "@controllers/db.controller";
 const router = Router();
 
 router.post("/sync", Db.sync);
+router.post("/drop", Db.drop);
 
 export default router;

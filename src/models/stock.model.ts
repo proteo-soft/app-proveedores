@@ -1,13 +1,13 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
 
-import { IStock } from "../interfaces/models/stock.interface";
+import { IStockCreation } from "../interfaces/models/stock.interface";
 import { Product, Sucursal } from "./index.model";
 
-class Stock extends Model implements IStock {
+class Stock extends Model implements IStockCreation {
   declare id: number;
   declare stock: number;
-  declare ProductId: number;
-  declare SucursalId: number;
+  declare productId: number;
+  declare sucursalId: number;
 
   // Timestamps
   declare readonly createdAt: Date;
@@ -45,7 +45,7 @@ Stock.init(
   },
   {
     sequelize,
-    modelName: "Stock",
+    modelName: "stock",
     freezeTableName: true,
   }
 );

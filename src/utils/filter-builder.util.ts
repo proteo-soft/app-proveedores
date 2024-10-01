@@ -1,5 +1,5 @@
 export function filterBuilder(opt) {
-  const { limit, offset, fullname, ...where } = opt;
+  const { limit, offset, ...where } = opt;
 
   if (!limit || limit > 50) opt.limit = 50;
   if (!offset) opt.offset = 0;

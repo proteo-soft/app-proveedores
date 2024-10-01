@@ -60,7 +60,7 @@ Agent.init(
   },
   {
     sequelize,
-    modelName: "Agent",
+    modelName: "agent",
   }
 );
 

@@ -33,7 +33,7 @@ List.init(
   },
   {
     sequelize,
-    modelName: "List",
+    modelName: "list",
   }
 );
 
