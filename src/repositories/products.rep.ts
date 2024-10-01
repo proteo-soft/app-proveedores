@@ -70,7 +70,7 @@ class ProductsRepository {
     }
   }
 
-  static async individualBulkUpdate(data) {
+  static async individualBulkUpdateById(data) {
     try {
       const idsNotModified: number[] = [];
 
@@ -96,8 +96,10 @@ class ProductsRepository {
           if (idNotModified) idsNotModified.push(idNotModified); // agrego los ids no modificados de la tabla stock
         }
 
-        const affected = await this.updateById(productData.id, productData);
+        // verifico si no hay información para actualizar en la tabla products, para pasar al siguiente producto
+        if (Object.entries(productData).length == 0) continue;
 
+        const affected = await this.update(productData.id, productData);
         if (affected == 0) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla products
       }
 
@@ -109,9 +111,9 @@ class ProductsRepository {
     }
   }
 
-  static async linealBulkUpdate(where, data) {
+  static async linealBulkUpdateById(where, data) {
     try {
-      const affectedRows = await products.update(
+      const affectedRows = await this.update(
         {
           id: { [Op.in]: where.products },
         },
@@ -123,9 +125,9 @@ class ProductsRepository {
     }
   }
 
-  static async updateById(id: number, data: IProduct) {
+  static async update(where, data: IProduct) {
     try {
-      return await products.update({ id }, data);
+      return await products.update(where, data);
     } catch (error) {
       throw error;
     }

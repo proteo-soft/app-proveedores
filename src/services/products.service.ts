@@ -45,8 +45,8 @@ export default class UsersService {
     try {
       //validar porque se cuelga cuando hay campos inexistentes
       return data.type == "individual"
-        ? await Products.individualBulkUpdate(data.products)
-        : await Products.linealBulkUpdate(data.where, data.updates);
+        ? await Products.individualBulkUpdateById(data.products)
+        : await Products.linealBulkUpdateById(data.where, data.updates);
     } catch (error) {
       throw error;
     }
@@ -54,7 +54,7 @@ export default class UsersService {
 
   static async updateById(id: string, data) {
     try {
-      return await Products.updateById(parseInt(id), data);
+      return await Products.update({ id: parseInt(id) }, data);
     } catch (error) {
       throw error;
     }
