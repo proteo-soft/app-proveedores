@@ -119,12 +119,29 @@ class ProductsRepository {
         },
         data
       );
+
       return affectedRows;
     } catch (error) {
       throw error;
     }
   }
 
+  static async updateStock(where, operation: "+" | "-", units: number) {
+    try {
+      const filters = filterBuilder(where);
+
+      const productStock = await stock.findOne(filters);
+      const currentStock = productStock.stock;
+      let newStock;
+
+      if (operation == "+") newStock = currentStock + units;
+      else newStock = currentStock - units;
+
+      return await productStock.update({ stock: newStock });
+    } catch (error) {
+      throw error;
+    }
+  }
   static async update(where, data: IProduct) {
     try {
       return await products.update(where, data);

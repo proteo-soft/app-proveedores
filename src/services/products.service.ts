@@ -25,6 +25,31 @@ export default class UsersService {
     }
   }
 
+  static async addStock(
+    id: string,
+    query: { sucursalId: number },
+    data: { stock: number }
+  ) {
+    try {
+      // const result = validateProduct(data); validar manual
+      // if (!result.success)
+      //   CustomError.new({
+      //     message: "La petición contiene campos inválidos",
+      //     data: result.error,
+      //     statusCode: 400,
+      //   });
+
+      const newStock = await Products.updateStock(
+        { productId: parseInt(id), sucursalId: query.sucursalId },
+        "+",
+        data.stock
+      );
+      return newStock;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async getAll(opt) {
     try {
       return await Products.getAll(opt);

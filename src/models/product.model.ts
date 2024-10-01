@@ -4,6 +4,7 @@ import { IProductCreation } from "../interfaces/models/product.interface";
 import Sucursal from "./sucursal.model";
 import Color from "./color.model";
 import Size from "./size.model";
+import Stock from "./stock.model";
 
 class Product extends Model implements IProductCreation {
   declare id: number;
@@ -21,7 +22,7 @@ class Product extends Model implements IProductCreation {
   declare addSucursal: (
     sucursal: Sucursal,
     opt: { through: { stock: number } }
-  ) => {};
+  ) => Promise<Stock>;
 
   // Timestamps
   declare readonly createdAt: Date;

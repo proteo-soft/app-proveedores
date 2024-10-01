@@ -12,6 +12,16 @@ class ProductsController {
     }
   }
 
+  static async addStock(req: Request, res: Response, next: NextFunction) {
+    try {
+      await Products.addStock(req.params.id, req.query, req.body);
+
+      res.status(200).json({ message: "Entrada de stock exitosa" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async read(req, res) {
     try {
       const products = await Products.getAll({});
