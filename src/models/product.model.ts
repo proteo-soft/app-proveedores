@@ -9,7 +9,6 @@ import Stock from "./stock.model";
 class Product extends Model implements IProductCreation {
   declare id: number;
   declare name: string;
-  declare stock: number;
   declare buy: boolean;
   declare sell: boolean;
   declare cost: number;

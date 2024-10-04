@@ -4,7 +4,7 @@ import ProductsController from "@controllers/products.controller";
 const productsRouter = Router();
 
 productsRouter.post("/", ProductsController.create);
-productsRouter.post("/:id/stock", ProductsController.addStock);
+productsRouter.patch("/:id/stock", ProductsController.updateStockById);
 
 productsRouter.get("/", ProductsController.read);
 productsRouter.get("/:id", ProductsController.readOne);

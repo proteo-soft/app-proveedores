@@ -36,11 +36,6 @@ Size.hasMany(Product);
 
 Color.hasMany(Product);
 
-// PRODUCT
-
-Product.belongsTo(Size);
-Product.belongsTo(Color);
-
 // STOCK
 
 Product.belongsToMany(Sucursal, {
@@ -75,6 +70,11 @@ Ticket.belongsToMany(Product, {
   through: TicketProduct,
   onDelete: "CASCADE",
 });
+
+// PRODUCT
+
+Product.belongsTo(Size);
+Product.belongsTo(Color);
 
 // TICKET
 

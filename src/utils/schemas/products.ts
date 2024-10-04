@@ -20,8 +20,7 @@ const productsSchema = z.object({
       message: "El stock tiene que ser positivo",
     })
     .int()
-    .optional()
-    .default(0),
+    .optional(),
 
   cost: z
     .number({
@@ -68,6 +67,18 @@ const productsSchema = z.object({
     })
     .optional()
     .default(true),
+
+  sizeId: z
+    .number({
+      invalid_type_error: "SizeId debe ser de tipo numérico",
+    })
+    .optional(),
+
+  colorId: z
+    .number({
+      invalid_type_error: "ColorId debe ser de tipo numérico",
+    })
+    .optional(),
 
   categoryId: z
     .number({

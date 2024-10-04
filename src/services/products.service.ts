@@ -8,7 +8,7 @@ import {
 
 import CustomError from "@utils/errors/customError";
 
-export default class UsersService {
+export default class ProductsService {
   static async create(data: IProductCreation) {
     try {
       const result = validateProduct(data);
@@ -20,31 +20,6 @@ export default class UsersService {
         });
 
       return await Products.create(result.data as IProductCreation);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async addStock(
-    id: string,
-    query: { sucursalId: number },
-    data: { stock: number }
-  ) {
-    try {
-      // const result = validateProduct(data); validar manual
-      // if (!result.success)
-      //   CustomError.new({
-      //     message: "La petición contiene campos inválidos",
-      //     data: result.error,
-      //     statusCode: 400,
-      //   });
-
-      const newStock = await Products.updateStock(
-        { productId: parseInt(id), sucursalId: query.sucursalId },
-        "+",
-        data.stock
-      );
-      return newStock;
     } catch (error) {
       throw error;
     }
@@ -77,9 +52,9 @@ export default class UsersService {
     }
   }
 
-  static async updateById(id: string, data) {
+  static async updateById(id: string, data, query) {
     try {
-      return await Products.update({ id: parseInt(id) }, data);
+      return await Products.update({ id: parseInt(id) }, data, query);
     } catch (error) {
       throw error;
     }

@@ -10,6 +10,8 @@ import products from "../DAO/product.dao";
 import sucursal from "../DAO/sucursal.dao";
 import prices from "../DAO/price.dao";
 
+import StockRepository from "./stock.rep";
+
 import { filterBuilder } from "@utils/filter-builder.util";
 import { removeDuplicates } from "@utils/remove-duplicates.util";
 
@@ -37,34 +39,30 @@ class ProductsRepository {
     }
   }
 
-  static async create(data: IProductCreation) {
+  static async getStock(where) {
+    try {
+      const filters = filterBuilder(where);
+      const stock = await StockRepository.findOne(filters);
+
+      return stock;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async create(data) {
     try {
       const { stock: units, ...productData } = data;
 
       const suc1 = (await sucursal.findById(1))!; // ver si combiene que el usuario tenga una sucursal asignada en la tabla users para que no haya que constantemente mandarle la sucursal
       const newProduct = await products.create(productData);
 
-      suc1.addProduct(newProduct, {
-        through: { stock: units },
-      });
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  private static async updateJoinTable(
-    where,
-    data,
-    model: typeof stock | typeof prices,
-    prop: string
-  ) {
-    try {
-      const updates = {};
-      updates[prop] = data; // le indico la propiedad a actualizar de la join table
-
-      const affectedRows = await model.update(where, updates);
-
-      return affectedRows == 0 ? where.productId : null; // verifico si el dato cambió
+      if (units)
+        await StockRepository.create({
+          stock: units,
+          sucursalId: suc1.id,
+          productId: newProduct.id,
+        });
     } catch (error) {
       throw error;
     }
@@ -86,26 +84,31 @@ class ProductsRepository {
         if (units) {
           const where = { sucursalId, productId: productData.id };
 
-          const idNotModified: number | null = await this.updateJoinTable(
-            where,
-            units,
-            stock,
-            "stock"
-          );
+          try {
+            const changed = await StockRepository.updateById(where, {
+              stock: units,
+            });
 
-          if (idNotModified) idsNotModified.push(idNotModified); // agrego los ids no modificados de la tabla stock
+            if (!changed) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla stock
+          } catch (error) {
+            idsNotModified.push(productData.id);
+          }
         }
 
         // verifico si no hay información para actualizar en la tabla products, para pasar al siguiente producto
         if (Object.entries(productData).length == 0) continue;
 
-        const affected = await this.update(productData.id, productData);
-        if (affected == 0) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla products
+        const affected = await this.update(
+          { id: productData.id },
+          productData,
+          {}
+        );
+        if (!affected) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla products
       }
 
       const parsedIds = removeDuplicates(idsNotModified); // saco los ids duplicados
 
-      return data.length - parsedIds.length;
+      return parsedIds;
     } catch (error) {
       throw error;
     }
@@ -117,7 +120,8 @@ class ProductsRepository {
         {
           id: { [Op.in]: where.products },
         },
-        data
+        data,
+        {}
       );
 
       return affectedRows;
@@ -126,25 +130,32 @@ class ProductsRepository {
     }
   }
 
-  static async updateStock(where, operation: "+" | "-", units: number) {
+  static async update(where, data, opt) {
     try {
-      const filters = filterBuilder(where);
+      const { stock: units, ...productData } = data;
 
-      const productStock = await stock.findOne(filters);
-      const currentStock = productStock.stock;
-      let newStock;
+      let idModified = false;
 
-      if (operation == "+") newStock = currentStock + units;
-      else newStock = currentStock - units;
+      if (units) {
+        const filters = {
+          productId: where.id,
+          sucursalId: opt.sucursalId,
+        };
 
-      return await productStock.update({ stock: newStock });
-    } catch (error) {
-      throw error;
-    }
-  }
-  static async update(where, data: IProduct) {
-    try {
-      return await products.update(where, data);
+        await StockRepository.updateById(filters, {
+          stock: units,
+        });
+
+        idModified = true;
+      }
+
+      if (Object.keys(productData).length > 0) {
+        const affected = await products.update(where, productData);
+
+        if (affected > 0) idModified = true;
+      }
+
+      return idModified;
     } catch (error) {
       throw error;
     }
