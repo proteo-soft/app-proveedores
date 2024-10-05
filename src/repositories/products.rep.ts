@@ -10,8 +10,8 @@ import products from "../DAO/product.dao";
 import sucursal from "../DAO/sucursal.dao";
 import prices from "../DAO/price.dao";
 
-import { filterBuilder } from "@utils/filter-builder.util";
-import { removeDuplicates } from "@utils/remove-duplicates.util";
+import { filterBuilder } from "../utils/filter-builder.util";
+import { removeDuplicates } from "../utils/remove-duplicates.util";
 
 class ProductsRepository {
   static async getById(id: number) {

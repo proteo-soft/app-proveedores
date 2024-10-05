@@ -1,12 +1,13 @@
-import Sucursal from "@repositories/sucursal.rep";
+import Sucursal from "../repositories/sucursal.rep";
 
-import { validateSucursal } from "@utils/schemas";
+import { validateSucursal } from "../utils/schemas";
+
 import {
   ISucursal,
   ISucursalCreation,
-} from "@interfaces/models/sucursal.interface";
+} from "../interfaces/models/sucursal.interface";
 
-import CustomError from "@utils/errors/customError";
+import CustomError from "../utils/errors/customError";
 
 export default class SucursalService {
   static async create(data: ISucursalCreation) {

@@ -8,7 +8,7 @@ import passport from "../middlewares/passportCb.mid";
 
 // CONTROLLER
 
-import Auth from "@controllers/auth.controller";
+import Auth from "../controllers/auth.controller";
 
 const authRouter = Router();
 

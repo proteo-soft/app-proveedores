@@ -5,7 +5,7 @@ import {
 
 import sucursal from "../DAO/sucursal.dao";
 
-import { filterBuilder } from "@utils/filter-builder.util";
+import { filterBuilder } from "../utils/filter-builder.util";
 
 class SucursalRepository {
   static async getById(id: number) {

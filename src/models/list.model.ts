@@ -1,5 +1,5 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
-import { IListCreation } from "@interfaces/models/list.interface";
+import { IListCreation } from "../interfaces/models/list.interface";
 
 class List extends Model implements IListCreation {
   declare id: number;

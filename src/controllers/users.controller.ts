@@ -23,6 +23,9 @@ class UsersController {
   }
 
   static async readOne(req: Request, res: Response, next: NextFunction) {
+    const users = await Users.getById(req.params.id);
+
+    res.status(200).json({ data: users });
     try {
     } catch (error) {
       next(error);
@@ -31,6 +34,9 @@ class UsersController {
 
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
+      const user = await Users.updateById(req.params.id, req.body)
+
+      res.status(200).json({ data: user });
     } catch (error) {
       next(error);
     }
@@ -38,6 +44,9 @@ class UsersController {
 
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
+      await Users.deleteById(req.params.id);
+
+      res.status(200).json({ message: "Usuario eliminado con éxito"});
     } catch (error) {
       next(error);
     }

@@ -1,6 +1,5 @@
-import Auth from "@repositories/auth.rep";
-
-import { IAuthCreation } from "@interfaces/models/auth.interface";
+import Auth from "../repositories/auth.rep";
+import { IAuthCreation } from "../interfaces/models/auth.interface";
 
 export default abstract class AuthService {
   static async create(data: IAuthCreation) {

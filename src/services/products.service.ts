@@ -1,12 +1,11 @@
-import Products from "@repositories/products.rep";
+import Products from "../repositories/products.rep";
 
-import { validateProduct } from "@utils/schemas";
+import { validateProduct } from "../utils/schemas";
 import {
   IProduct,
   IProductCreation,
-} from "@interfaces/models/product.interface";
-
-import CustomError from "@utils/errors/customError";
+} from "../interfaces/models/product.interface";
+import CustomError from "../utils/errors/customError";
 
 export default class UsersService {
   static async create(data: IProductCreation) {
