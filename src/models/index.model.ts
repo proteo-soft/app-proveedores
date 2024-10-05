@@ -58,6 +58,9 @@ List.belongsToMany(Product, {
   onDelete: "CASCADE",
 });
 
+Price.belongsTo(List);
+Price.belongsTo(Product);
+
 Price.hasMany(Ticket);
 
 // TICKET-PRODUCT

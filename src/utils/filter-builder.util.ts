@@ -1,4 +1,4 @@
-function deleteUndefinedProps(obj) {
+export function deleteUndefinedProps(obj) {
   for (const prop in obj) {
     if (obj[prop] === undefined) {
       delete obj[prop];

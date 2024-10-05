@@ -13,3 +13,10 @@ export interface IProductCreation {
 export interface IProduct extends IProductCreation {
   id: number;
 }
+
+export interface IProductUpdate extends IProduct {
+  stock?: number;
+  sucursalId?: number;
+  listId?: number;
+  price?: number;
+}

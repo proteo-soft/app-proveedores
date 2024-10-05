@@ -1,60 +1,42 @@
-import {
-  IProductCreation,
-  IProduct,
-} from "../interfaces/models/product.interface";
-
 import { Op } from "../database/connect";
 
-import stock from "../DAO/stock.dao";
 import products from "../DAO/product.dao";
-import sucursal from "../DAO/sucursal.dao";
-import prices from "../DAO/price.dao";
+import sucursal from "../DAO/sucursal.dao"; // usar el repo de suc
 
+import SucursalRepository from "./sucursal.rep";
 import StockRepository from "./stock.rep";
+import ListsRepository from "./lists.rep";
+import PricesRepository from "./prices.rep";
+
+import { IProductUpdate } from "@interfaces/models/product.interface";
 
 import { filterBuilder } from "@utils/filter-builder.util";
 import { removeDuplicates } from "@utils/remove-duplicates.util";
+import { checkMissingIds } from "@utils/check-missings";
+import { checkErrorType } from "@utils/check-error-type.util";
 
 class ProductsRepository {
-  static async getById(id: number) {
+  static async checkMissings(idsToSearch: number[]) {
     try {
-      return await products.findById(id);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async getAll(opt) {
-    try {
-      const filters = filterBuilder(opt);
-
-      return await products.findAll({
-        ...filters,
-        include: [
-          { model: sucursal.model, through: { attributes: ["stock"] } },
-        ],
+      const listsFound = await products.findAll({
+        where: {
+          id: {
+            [Op.in]: idsToSearch,
+          },
+        },
       });
-    } catch (error) {
-      throw error;
-    }
-  }
 
-  static async getStock(where) {
-    try {
-      const filters = filterBuilder(where);
-      const stock = await StockRepository.findOne(filters);
-
-      return stock;
+      checkMissingIds(listsFound.rows, idsToSearch);
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
   static async create(data) {
     try {
-      const { stock: units, ...productData } = data;
+      const { stock: units, sucursalId, ...productData } = data;
 
-      const suc1 = (await sucursal.findById(1))!; // ver si combiene que el usuario tenga una sucursal asignada en la tabla users para que no haya que constantemente mandarle la sucursal
+      const suc1 = (await sucursal.findById(sucursalId))!;
       const newProduct = await products.create(productData);
 
       if (units)
@@ -64,11 +46,31 @@ class ProductsRepository {
           productId: newProduct.id,
         });
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
-  static async individualBulkUpdateById(data) {
+  static async getAll(opt) {
+    try {
+      const filters = filterBuilder(opt);
+
+      return await products.findAll({
+        ...filters,
+      });
+    } catch (error) {
+      throw checkErrorType(error);
+    }
+  }
+
+  static async getById(id: number) {
+    try {
+      return await products.findById(id);
+    } catch (error) {
+      throw checkErrorType(error);
+    }
+  }
+
+  static async individualBulkUpdateById(data: IProductUpdate[]) {
     try {
       const idsNotModified: number[] = [];
 
@@ -98,10 +100,9 @@ class ProductsRepository {
         // verifico si no hay información para actualizar en la tabla products, para pasar al siguiente producto
         if (Object.entries(productData).length == 0) continue;
 
-        const affected = await this.update(
+        const affected = await products.update(
           { id: productData.id },
-          productData,
-          {}
+          productData
         );
         if (!affected) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla products
       }
@@ -110,54 +111,22 @@ class ProductsRepository {
 
       return parsedIds;
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
   static async linealBulkUpdateById(where, data) {
     try {
-      const affectedRows = await this.update(
+      const affectedRows = await products.update(
         {
           id: { [Op.in]: where.products },
         },
-        data,
-        {}
+        data
       );
 
       return affectedRows;
     } catch (error) {
-      throw error;
-    }
-  }
-
-  static async update(where, data, opt) {
-    try {
-      const { stock: units, ...productData } = data;
-
-      let idModified = false;
-
-      if (units) {
-        const filters = {
-          productId: where.id,
-          sucursalId: opt.sucursalId,
-        };
-
-        await StockRepository.updateById(filters, {
-          stock: units,
-        });
-
-        idModified = true;
-      }
-
-      if (Object.keys(productData).length > 0) {
-        const affected = await products.update(where, productData);
-
-        if (affected > 0) idModified = true;
-      }
-
-      return idModified;
-    } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
@@ -165,7 +134,52 @@ class ProductsRepository {
     try {
       return await products.delete({ id });
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
+    }
+  }
+
+  static async getStock(where) {
+    try {
+      const filters = filterBuilder(where);
+      const stock = await StockRepository.getAll(filters);
+
+      return stock;
+    } catch (error) {
+      throw checkErrorType(error);
+    }
+  }
+
+  static async createList(data) {
+    try {
+      await ListsRepository.create(data);
+    } catch (error) {
+      throw checkErrorType(error);
+    }
+  }
+
+  static async setPrices(
+    data: { productId: number; listId: number; price: number }[]
+  ) {
+    try {
+      // const priceListIds = data.map((data) => data.listId);
+      // await ListsRepository.checkMissings(priceListIds);
+
+      // const productIds = data.map((data) => data.productId);
+      // await this.checkMissings(productIds);
+
+      await PricesRepository.create(data);
+    } catch (error) {
+      throw checkErrorType(error);
+    }
+  }
+
+  static async getPrices(where) {
+    try {
+      const filters = filterBuilder(where);
+
+      return await PricesRepository.getAll(filters);
+    } catch (error) {
+      throw checkErrorType(error);
     }
   }
 }

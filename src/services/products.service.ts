@@ -1,15 +1,13 @@
 import Products from "@repositories/products.rep";
 
 import { validateProduct } from "@utils/schemas";
-import {
-  IProduct,
-  IProductCreation,
-} from "@interfaces/models/product.interface";
+import { IProductCreation } from "@interfaces/models/product.interface";
 
 import CustomError from "@utils/errors/customError";
+import { deleteUndefinedProps } from "@utils/filter-builder.util";
 
 export default class ProductsService {
-  static async create(data: IProductCreation) {
+  static async create(data, opt) {
     try {
       const result = validateProduct(data);
       if (!result.success)
@@ -19,15 +17,34 @@ export default class ProductsService {
           statusCode: 400,
         });
 
-      return await Products.create(result.data as IProductCreation);
+      return await Products.create({
+        ...result.data,
+        sucursalId: opt.sucursalId,
+      });
     } catch (error) {
       throw error;
     }
   }
 
-  static async getAll(opt) {
+  static async createList(data) {
     try {
-      return await Products.getAll(opt);
+      // const result = validateProduct(data);
+      // if (!result.success)
+      //   CustomError.new({
+      //     message: "La petición contiene campos inválidos",
+      //     data: result.error,
+      //     statusCode: 400,
+      //   });
+
+      const a = await Products.createList(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getAll(data) {
+    try {
+      return await Products.getAll(data);
     } catch (error) {
       throw error;
     }
@@ -52,9 +69,50 @@ export default class ProductsService {
     }
   }
 
+  static async getStockById(productId: string, query) {
+    try {
+      return await Products.getStock(
+        deleteUndefinedProps({
+          productId,
+          sucursalId: query.sucursalId,
+        })
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async setPricesById(productId: string, pricesData) {
+    try {
+      const pricesMapped = pricesData.prices.map((data) => {
+        return {
+          productId: parseInt(productId),
+          listId: data.listId,
+          price: data.price,
+        };
+      });
+
+      await Products.setPrices(pricesMapped);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getPricesById(productId: string, query) {
+    try {
+      return await Products.getPrices({
+        productId: parseInt(productId),
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async updateById(id: string, data, query) {
     try {
-      return await Products.update({ id: parseInt(id) }, data, query);
+      return await Products.individualBulkUpdateById([
+        { ...query, ...data, id: parseInt(id) },
+      ]);
     } catch (error) {
       throw error;
     }

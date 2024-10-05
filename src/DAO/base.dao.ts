@@ -31,6 +31,7 @@ export abstract class BaseDAO<T extends Model> {
   async findById(id: number) {
     try {
       const data = await this._model.findByPk(id);
+
       if (!data)
         CustomError.new({
           message: `No hay resultados de ${this._model.name}`,
@@ -64,6 +65,14 @@ export abstract class BaseDAO<T extends Model> {
   async create(data: Attributes<T>) {
     try {
       return await this._model.create(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async bulkCreate(data: Attributes<T>) {
+    try {
+      return await this._model.bulkCreate(data);
     } catch (error) {
       throw error;
     }

@@ -1,13 +1,14 @@
 import { IAuth, IAuthCreation } from "../interfaces/models/auth.interface";
 
 import authDAO from "../DAO/auth.dao";
+import { checkErrorType } from "@utils/check-error-type.util";
 
 class AuthRepository {
   static async create(data: IAuthCreation) {
     try {
       await authDAO.create(data);
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
@@ -15,7 +16,7 @@ class AuthRepository {
     try {
       return (await authDAO.findById(Number(id))) as IAuth;
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 }

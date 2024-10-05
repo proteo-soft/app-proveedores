@@ -1,6 +1,4 @@
 import stock from "../DAO/stock.dao";
-import ProductsRepository from "./products.rep";
-import SucursalRepository from "./sucursal.rep";
 
 class StockRepository {
   static async create(data: {
@@ -19,6 +17,13 @@ class StockRepository {
     try {
       return await stock.findAll({
         ...where,
+        attributes: [
+          "productId",
+          "sucursalId",
+          "stock",
+          "createdAt",
+          "updatedAt",
+        ],
       });
     } catch (error) {
       throw error;
@@ -37,9 +42,6 @@ class StockRepository {
 
   static async updateById(where, data) {
     try {
-      await SucursalRepository.getById(where.sucursalId);
-      await ProductsRepository.getById(where.productId);
-
       return await stock.updateOrCreate(where, data);
     } catch (error) {
       throw error;
