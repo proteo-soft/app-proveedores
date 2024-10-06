@@ -1,4 +1,4 @@
-import { Op } from "../database/connect";
+import sequelize, { Op } from "../database/connect";
 
 import products from "../DAO/product.dao";
 import sucursal from "../DAO/sucursal.dao"; // usar el repo de suc
@@ -36,15 +36,19 @@ class ProductsRepository {
     try {
       const { stock: units, sucursalId, ...productData } = data;
 
-      const suc1 = (await sucursal.findById(sucursalId))!;
-      const newProduct = await products.create(productData);
+      await sequelize.transaction(async (t) => {
+        const suc1 = (await sucursal.findById(sucursalId))!;
+        const newProduct = await products.create(productData, t);
+        // await t.commit();
+        console.log(newProduct);
 
-      if (units)
-        await StockRepository.create({
-          stock: units,
-          sucursalId: suc1.id,
-          productId: newProduct.id,
-        });
+        if (units)
+          await StockRepository.create({
+            stock: units,
+            sucursalId: suc1.id,
+            productId: newProduct.id,
+          });
+      });
     } catch (error) {
       throw checkErrorType(error);
     }

@@ -1,4 +1,10 @@
-import { Attributes, Model, ModelStatic, WhereOptions } from "sequelize";
+import {
+  Attributes,
+  Model,
+  ModelStatic,
+  Transaction,
+  WhereOptions,
+} from "sequelize";
 import CustomError from "@utils/errors/customError";
 
 export abstract class BaseDAO<T extends Model> {
@@ -62,9 +68,11 @@ export abstract class BaseDAO<T extends Model> {
     }
   }
 
-  async create(data: Attributes<T>) {
+  async create(data: Attributes<T>, transaction: Transaction) {
     try {
-      return await this._model.create(data);
+      return await this._model.create(data, {
+        transaction: transaction,
+      });
     } catch (error) {
       throw error;
     }
