@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import Sucursal from "@services/sucursal.service";
+import Sucursal from "../services/sucursal.service";
 
 class SucursalController {
   static async create(req: Request, res: Response, next: NextFunction) {

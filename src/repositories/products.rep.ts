@@ -1,24 +1,56 @@
-import {
-  IProductCreation,
-  IProduct,
-} from "../interfaces/models/product.interface";
+import sequelize, { Op } from "../database/connect";
 
-import { Op } from "../database/connect";
-
-import stock from "../DAO/stock.dao";
 import products from "../DAO/product.dao";
-import sucursal from "../DAO/sucursal.dao";
-import prices from "../DAO/price.dao";
+import sucursal from "../DAO/sucursal.dao"; // usar el repo de suc
+
+import SucursalRepository from "./sucursal.rep";
+import StockRepository from "./stock.rep";
+import ListsRepository from "./lists.rep";
+import PricesRepository from "./prices.rep";
+
+import { IProductUpdate } from "../interfaces/models/product.interface";
 
 import { filterBuilder } from "../utils/filter-builder.util";
 import { removeDuplicates } from "../utils/remove-duplicates.util";
+import { checkMissingIds } from "../utils/check-missings";
+import { checkErrorType } from "../utils/check-error-type.util";
 
 class ProductsRepository {
-  static async getById(id: number) {
+  static async checkMissings(idsToSearch: number[]) {
     try {
-      return await products.findById(id);
+      const listsFound = await products.findAll({
+        where: {
+          id: {
+            [Op.in]: idsToSearch,
+          },
+        },
+      });
+
+      checkMissingIds(listsFound.rows, idsToSearch);
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
+    }
+  }
+
+  static async create(data) {
+    try {
+      const { stock: units, sucursalId, ...productData } = data;
+
+      await sequelize.transaction(async (t) => {
+        const suc1 = (await sucursal.findById(sucursalId))!;
+        const newProduct = await products.create(productData, t);
+        // await t.commit();
+        console.log(newProduct);
+
+        if (units)
+          await StockRepository.create({
+            stock: units,
+            sucursalId: suc1.id,
+            productId: newProduct.id,
+          });
+      });
+    } catch (error) {
+      throw checkErrorType(error);
     }
   }
 
@@ -28,49 +60,21 @@ class ProductsRepository {
 
       return await products.findAll({
         ...filters,
-        include: [
-          { model: sucursal.model, through: { attributes: ["stock"] } },
-        ],
       });
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
-  static async create(data: IProductCreation) {
+  static async getById(id: number) {
     try {
-      const { stock: units, ...productData } = data;
-
-      const suc1 = (await sucursal.findById(1))!; // ver si combiene que el usuario tenga una sucursal asignada en la tabla users para que no haya que constantemente mandarle la sucursal
-      const newProduct = await products.create(productData);
-
-      suc1.addProduct(newProduct, {
-        through: { stock: units },
-      });
+      return await products.findById(id);
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
-  private static async updateJoinTable(
-    where,
-    data,
-    model: typeof stock | typeof prices,
-    prop: string
-  ) {
-    try {
-      const updates = {};
-      updates[prop] = data; // le indico la propiedad a actualizar de la join table
-
-      const affectedRows = await model.update(where, updates);
-
-      return affectedRows == 0 ? where.productId : null; // verifico si el dato cambió
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async individualBulkUpdateById(data) {
+  static async individualBulkUpdateById(data: IProductUpdate[]) {
     try {
       const idsNotModified: number[] = [];
 
@@ -86,50 +90,47 @@ class ProductsRepository {
         if (units) {
           const where = { sucursalId, productId: productData.id };
 
-          const idNotModified: number | null = await this.updateJoinTable(
-            where,
-            units,
-            stock,
-            "stock"
-          );
+          try {
+            const changed = await StockRepository.updateById(where, {
+              stock: units,
+            });
 
-          if (idNotModified) idsNotModified.push(idNotModified); // agrego los ids no modificados de la tabla stock
+            if (!changed) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla stock
+          } catch (error) {
+            idsNotModified.push(productData.id);
+          }
         }
 
         // verifico si no hay información para actualizar en la tabla products, para pasar al siguiente producto
         if (Object.entries(productData).length == 0) continue;
 
-        const affected = await this.update(productData.id, productData);
-        if (affected == 0) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla products
+        const affected = await products.update(
+          { id: productData.id },
+          productData
+        );
+        if (!affected) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla products
       }
 
       const parsedIds = removeDuplicates(idsNotModified); // saco los ids duplicados
 
-      return data.length - parsedIds.length;
+      return parsedIds;
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
   static async linealBulkUpdateById(where, data) {
     try {
-      const affectedRows = await this.update(
+      const affectedRows = await products.update(
         {
           id: { [Op.in]: where.products },
         },
         data
       );
+
       return affectedRows;
     } catch (error) {
-      throw error;
-    }
-  }
-
-  static async update(where, data: IProduct) {
-    try {
-      return await products.update(where, data);
-    } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
@@ -137,7 +138,52 @@ class ProductsRepository {
     try {
       return await products.delete({ id });
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
+    }
+  }
+
+  static async getStock(where) {
+    try {
+      const filters = filterBuilder(where);
+      const stock = await StockRepository.getAll(filters);
+
+      return stock;
+    } catch (error) {
+      throw checkErrorType(error);
+    }
+  }
+
+  static async createList(data) {
+    try {
+      await ListsRepository.create(data);
+    } catch (error) {
+      throw checkErrorType(error);
+    }
+  }
+
+  static async setPrices(
+    data: { productId: number; listId: number; price: number }[]
+  ) {
+    try {
+      // const priceListIds = data.map((data) => data.listId);
+      // await ListsRepository.checkMissings(priceListIds);
+
+      // const productIds = data.map((data) => data.productId);
+      // await this.checkMissings(productIds);
+
+      await PricesRepository.create(data);
+    } catch (error) {
+      throw checkErrorType(error);
+    }
+  }
+
+  static async getPrices(where) {
+    try {
+      const filters = filterBuilder(where);
+
+      return await PricesRepository.getAll(filters);
+    } catch (error) {
+      throw checkErrorType(error);
     }
   }
 }

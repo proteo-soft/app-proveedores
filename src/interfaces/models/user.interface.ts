@@ -1,5 +1,5 @@
 export interface IUserCreation {
-  fullname: string;
+  fullName: string;
   email: string;
   role?: number;
   isActive?: boolean;

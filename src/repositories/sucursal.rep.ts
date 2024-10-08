@@ -6,13 +6,14 @@ import {
 import sucursal from "../DAO/sucursal.dao";
 
 import { filterBuilder } from "../utils/filter-builder.util";
+import { checkErrorType } from "../utils/check-error-type.util";
 
 class SucursalRepository {
   static async getById(id: number) {
     try {
       return await sucursal.findById(id);
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
@@ -22,7 +23,7 @@ class SucursalRepository {
 
       return await sucursal.findAll(filters);
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
@@ -30,7 +31,7 @@ class SucursalRepository {
     try {
       return await sucursal.create(data);
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
@@ -38,7 +39,7 @@ class SucursalRepository {
     try {
       return await sucursal.update({ id }, data);
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
@@ -46,7 +47,7 @@ class SucursalRepository {
     try {
       return await sucursal.delete({ id });
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 }

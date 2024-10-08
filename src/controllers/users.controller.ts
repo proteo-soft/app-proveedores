@@ -11,7 +11,6 @@ class UsersController {
       next(error);
     }
   }
-
   static async read(req: Request, res: Response, next: NextFunction) {
     try {
       const users = await Users.getAll(req.query);

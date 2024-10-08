@@ -1,6 +1,6 @@
 import { BaseDAO } from "./base.dao";
 
-import List from "@models/list.model";
+import List from "../models/list.model";
 
 class ListDAO extends BaseDAO<List> {
   constructor() {

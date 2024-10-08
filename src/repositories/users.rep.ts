@@ -3,6 +3,7 @@ import { IUserCreation, IUser } from "../interfaces/models/user.interface";
 import users from "../DAO/user.dao";
 
 import { filterBuilder } from "../utils/filter-builder.util";
+import { checkErrorType } from "../utils/check-error-type.util";
 
 class UsersRepository {
   static async getById(id: number) {
@@ -23,7 +24,7 @@ class UsersRepository {
 
       return user.rows[0].dataValues as IUser;
     } catch (error) {
-      throw error;
+      throw checkErrorType(error);
     }
   }
 
