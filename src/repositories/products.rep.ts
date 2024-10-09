@@ -36,19 +36,17 @@ class ProductsRepository {
     try {
       const { stock: units, sucursalId, ...productData } = data;
 
-      await sequelize.transaction(async (t) => {
-        const suc1 = (await sucursal.findById(sucursalId))!;
-        const newProduct = await products.create(productData, t);
-        // await t.commit();
-        console.log(newProduct);
+      const suc1 = (await sucursal.findById(sucursalId))!;
+      const newProduct = await products.create(productData);
+      // await t.commit();
+      console.log(newProduct);
 
-        if (units)
-          await StockRepository.create({
-            stock: units,
-            sucursalId: suc1.id,
-            productId: newProduct.id,
-          });
-      });
+      if (units)
+        await StockRepository.create({
+          stock: units,
+          sucursalId: suc1.id,
+          productId: newProduct.id,
+        });
     } catch (error) {
       throw checkErrorType(error);
     }

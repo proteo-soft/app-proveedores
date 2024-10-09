@@ -6,7 +6,7 @@ class SucursalController {
     try {
       await Sucursal.create(req.body);
 
-      res.status(201).json({ message: "Producto creado éxitosamente" });
+      res.status(201).json({ message: "Sucursal creada éxitosamente" });
     } catch (error) {
       next(error);
     }
@@ -32,7 +32,7 @@ class SucursalController {
     }
   }
 
-  static async update(req: Request, res: Response, next: NextFunction) { 
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       const sucursal = await Sucursal.updateById(req.params.id, req.body);
 
@@ -43,7 +43,7 @@ class SucursalController {
   }
 
   static async delete(req: Request, res: Response, next: NextFunction) {
-    try { 
+    try {
       await Sucursal.deleteById(req.params.id);
 
       res.status(200).json({ message: "Eliminado con éxito" });
