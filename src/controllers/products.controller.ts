@@ -60,11 +60,21 @@ class ProductsController {
     try {
       const products = await Products.deleteById(req.params.id);
 
-      res.status(200).json({ data: products});
+      res.status(200).json({ data: products });
     } catch (error) {
       next(error);
     }
+  }
+
+  static async deleteListById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const products = await Products.deleteListById(req.params.id);
+
+      res.status(200).json({ data: products });
+    } catch (error) {
+      next(error);
     }
+  }
 
   static async createList(req: Request, res: Response, next: NextFunction) {
     try {

@@ -4,7 +4,7 @@ import { validateAgent } from "@utils/schemas/agent";
 
 import CustomError from "@utils/errors/customError";
 
-export default class SuppliersService {
+export default class ClientsService {
   static async create(data) {
     try {
       const result = validateAgent(data);
@@ -16,7 +16,7 @@ export default class SuppliersService {
           statusCode: 400,
         });
 
-      return await Agents.create({ ...result.data, type: "p" });
+      return await Agents.create({ ...result.data, type: "c" });
     } catch (error) {
       throw error;
     }
@@ -24,7 +24,7 @@ export default class SuppliersService {
 
   static async getAll(opt) {
     try {
-      return await Agents.getAll({ ...opt, type: "p" });
+      return await Agents.getAll({ ...opt, type: "c" });
     } catch (error) {
       throw error;
     }
@@ -32,7 +32,8 @@ export default class SuppliersService {
 
   static async getById(id: string) {
     try {
-      return await Agents.findOne({ id: parseInt(id), type: "p" });
+      // hacer get one, porque si le paso id de proveedor lo encuentra. El getByID NO acepta parametros de busqueda más que el ID
+      return await Agents.findOne({ id: parseInt(id), type: "c" });
     } catch (error) {
       throw error;
     }
@@ -48,7 +49,7 @@ export default class SuppliersService {
 
   static async updateById(id: string, data) {
     try {
-      return await Agents.update({ id: parseInt(id), type: "p" }, data);
+      return await Agents.update({ id: parseInt(id), type: "c" }, data);
     } catch (error) {
       throw error;
     }
@@ -56,7 +57,7 @@ export default class SuppliersService {
 
   static async deleteById(id: string) {
     try {
-      return await Agents.delete({ id: parseInt(id), type: "p" });
+      return await Agents.delete({ id: parseInt(id), type: "c" });
     } catch (error) {
       throw error;
     }

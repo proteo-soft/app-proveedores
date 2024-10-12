@@ -36,8 +36,6 @@ class PricesRepository {
 
   static async updateById(where, data) {
     try {
-      await ProductsRepository.getById(where.productId);
-
       return await prices.updateOrCreate(where, data);
     } catch (error) {
       throw error;

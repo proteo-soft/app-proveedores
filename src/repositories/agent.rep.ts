@@ -15,26 +15,34 @@ class AgentRepository {
 
   static async getByEmail(email: string) {
     try {
-      const user = await this.getAll({ email });
+      const agent = await this.findOne({ email });
 
-      if (!user.rows[0]) throw new Error("No encontrado");
-
-      return user.rows[0].dataValues;
+      return agent;
     } catch (error) {
       throw error;
     }
   }
 
-  static async create(data) { 
+  static async create(data) {
     return (await agents.create(data)).dataValues;
   }
 
-  static async update(id: number, data) {
-    return await agents.update({ id }, data);
+  static async findOne(where) {
+    try {
+      const filters = filterBuilder(where);
+
+      return await agents.findOne(filters);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  static async delete(id: number) {
-    return await agents.delete({ id });
+  static async update(where, data) {
+    return await agents.update(where, data);
+  }
+
+  static async delete(where) {
+    return await agents.delete(where);
   }
 }
 

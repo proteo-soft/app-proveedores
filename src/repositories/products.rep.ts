@@ -1,4 +1,4 @@
-import sequelize, { Op } from "../database/connect";
+import { Op } from "../database/connect";
 
 import products from "../DAO/product.dao";
 import sucursal from "../DAO/sucursal.dao"; // usar el repo de suc
@@ -38,8 +38,6 @@ class ProductsRepository {
 
       const suc1 = (await sucursal.findById(sucursalId))!;
       const newProduct = await products.create(productData);
-      // await t.commit();
-      console.log(newProduct);
 
       if (units)
         await StockRepository.create({
@@ -75,6 +73,7 @@ class ProductsRepository {
   static async individualBulkUpdateById(data: IProductUpdate[]) {
     try {
       const idsNotModified: number[] = [];
+      const sucursalIds: any = [];
 
       for (const product of data) {
         const {
@@ -87,6 +86,13 @@ class ProductsRepository {
 
         if (units) {
           const where = { sucursalId, productId: productData.id };
+
+          if (!sucursalIds.includes(where.sucursalId)) {
+            // valido si existe esa sucursal antes de agregar/modificar
+            await sucursal.findById(where.sucursalId as number);
+
+            sucursalIds.push(where.sucursalId);
+          }
 
           try {
             const changed = await StockRepository.updateById(where, {
@@ -111,7 +117,7 @@ class ProductsRepository {
 
       const parsedIds = removeDuplicates(idsNotModified); // saco los ids duplicados
 
-      return parsedIds;
+      return { notFound: parsedIds };
     } catch (error) {
       throw checkErrorType(error);
     }
@@ -163,12 +169,6 @@ class ProductsRepository {
     data: { productId: number; listId: number; price: number }[]
   ) {
     try {
-      // const priceListIds = data.map((data) => data.listId);
-      // await ListsRepository.checkMissings(priceListIds);
-
-      // const productIds = data.map((data) => data.productId);
-      // await this.checkMissings(productIds);
-
       await PricesRepository.create(data);
     } catch (error) {
       throw checkErrorType(error);
@@ -180,6 +180,14 @@ class ProductsRepository {
       const filters = filterBuilder(where);
 
       return await PricesRepository.getAll(filters);
+    } catch (error) {
+      throw checkErrorType(error);
+    }
+  }
+
+  static async deleteListById(id: number) {
+    try {
+      return await ListsRepository.deleteById(id);
     } catch (error) {
       throw checkErrorType(error);
     }

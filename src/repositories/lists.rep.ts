@@ -48,7 +48,7 @@ class ListsRepository {
     }
   }
 
-  static async update(id: number, data) {
+  static async updateById(id: number, data) {
     try {
       return await lists.update({ id }, data);
     } catch (error) {
@@ -56,7 +56,7 @@ class ListsRepository {
     }
   }
 
-  static async delete(id: number) {
+  static async deleteById(id: number) {
     try {
       return await lists.delete({ id });
     } catch (error) {

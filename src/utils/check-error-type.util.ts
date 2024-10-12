@@ -24,7 +24,7 @@ export function checkErrorType(error) {
       default:
         CustomError.new({
           message: error.message,
-          statusCode: 500,
+          statusCode: error.statusCode || 500,
           data: "",
         });
         break;

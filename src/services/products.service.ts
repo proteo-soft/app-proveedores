@@ -1,9 +1,9 @@
 import Products from "../repositories/products.rep";
 
-import { validateProduct } from "../utils/schemas"; 
+import { validateProduct } from "../utils/schemas";
 import { IProductCreation } from "../interfaces/models/product.interface";
 
-import CustomError from "../utils/errors/customError"; 
+import CustomError from "../utils/errors/customError";
 import { deleteUndefinedProps } from "../utils/filter-builder.util";
 
 export default class ProductsService {
@@ -28,15 +28,17 @@ export default class ProductsService {
 
   static async createList(data) {
     try {
-      // const result = validateProduct(data);
-      // if (!result.success)
-      //   CustomError.new({
-      //     message: "La petición contiene campos inválidos",
-      //     data: result.error,
-      //     statusCode: 400,
-      //   });
+      //validar
 
-      const a = await Products.createList(data);
+      await Products.createList(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteListById(listId: string) {
+    try {
+      await Products.deleteListById(parseInt(listId));
     } catch (error) {
       throw error;
     }

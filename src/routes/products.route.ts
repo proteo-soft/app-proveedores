@@ -17,5 +17,6 @@ productsRouter.patch("/", ProductsController.update);
 productsRouter.patch("/:id", ProductsController.updateById);
 
 productsRouter.delete("/:id", ProductsController.delete);
+productsRouter.delete("/list/:id", ProductsController.deleteListById);
 
 export default productsRouter;
