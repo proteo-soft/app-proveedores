@@ -47,6 +47,12 @@ Sucursal.belongsToMany(Product, {
   onDelete: "CASCADE",
 });
 
+// SUPER MANY-TO-MANY RELATION
+Product.hasMany(Stock);
+Stock.belongsTo(Product);
+Sucursal.hasMany(Stock);
+Stock.belongsTo(Sucursal);
+
 // PRICE
 
 Product.belongsToMany(List, {

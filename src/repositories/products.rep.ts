@@ -1,16 +1,20 @@
 import { Op } from "../database/connect";
 
-import products from "../DAO/product.dao";
-import sucursal from "../DAO/sucursal.dao"; // usar el repo de suc
+import productsDAO from "../DAO/product.dao";
+import stockDAO from "../DAO/stock.dao";
+import sucursalDAO from "../DAO/sucursal.dao"; // usar el repo de suc
 
 import SucursalRepository from "./sucursal.rep";
-import StockRepository from "./stock.rep";
 import ListsRepository from "./lists.rep";
 import PricesRepository from "./prices.rep";
+import StockRepository from "./stock.rep";
 
 import { IProductUpdate } from "../interfaces/models/product.interface";
 
-import { filterBuilder } from "../utils/filter-builder.util";
+import {
+  deleteUndefinedProps,
+  filterBuilder,
+} from "../utils/filter-builder.util";
 import { removeDuplicates } from "../utils/remove-duplicates.util";
 import { checkMissingIds } from "../utils/check-missings";
 import { checkErrorType } from "../utils/check-error-type.util";
@@ -18,7 +22,7 @@ import { checkErrorType } from "../utils/check-error-type.util";
 class ProductsRepository {
   static async checkMissings(idsToSearch: number[]) {
     try {
-      const listsFound = await products.findAll({
+      const listsFound = await productsDAO.findAll({
         where: {
           id: {
             [Op.in]: idsToSearch,
@@ -36,8 +40,8 @@ class ProductsRepository {
     try {
       const { stock: units, sucursalId, ...productData } = data;
 
-      const suc1 = (await sucursal.findById(sucursalId))!;
-      const newProduct = await products.create(productData);
+      const suc1 = (await sucursalDAO.findById(sucursalId))!;
+      const newProduct = await productsDAO.create(productData);
 
       if (units)
         await StockRepository.create({
@@ -52,10 +56,20 @@ class ProductsRepository {
 
   static async getAll(opt) {
     try {
-      const filters = filterBuilder(opt);
+      const { sucursalId, ...where } = opt;
+      const filters = filterBuilder(where);
 
-      return await products.findAll({
+      return await productsDAO.findAll({
         ...filters,
+        include: [
+          {
+            model: stockDAO.model,
+            where: deleteUndefinedProps({
+              sucursalId: opt.sucursalId,
+            }),
+            attributes: ["sucursalId", "stock"],
+          },
+        ],
       });
     } catch (error) {
       throw checkErrorType(error);
@@ -64,7 +78,7 @@ class ProductsRepository {
 
   static async getById(id: number) {
     try {
-      return await products.findById(id);
+      return await productsDAO.findById(id);
     } catch (error) {
       throw checkErrorType(error);
     }
@@ -89,7 +103,7 @@ class ProductsRepository {
 
           if (!sucursalIds.includes(where.sucursalId)) {
             // valido si existe esa sucursal antes de agregar/modificar
-            await sucursal.findById(where.sucursalId as number);
+            await sucursalDAO.findById(where.sucursalId as number);
 
             sucursalIds.push(where.sucursalId);
           }
@@ -108,7 +122,7 @@ class ProductsRepository {
         // verifico si no hay información para actualizar en la tabla products, para pasar al siguiente producto
         if (Object.entries(productData).length == 0) continue;
 
-        const affected = await products.update(
+        const affected = await productsDAO.update(
           { id: productData.id },
           productData
         );
@@ -125,7 +139,7 @@ class ProductsRepository {
 
   static async linealBulkUpdateById(where, data) {
     try {
-      const affectedRows = await products.update(
+      const affectedRows = await productsDAO.update(
         {
           id: { [Op.in]: where.products },
         },
@@ -140,7 +154,7 @@ class ProductsRepository {
 
   static async delete(id: number) {
     try {
-      return await products.delete({ id });
+      return await productsDAO.delete({ id });
     } catch (error) {
       throw checkErrorType(error);
     }
