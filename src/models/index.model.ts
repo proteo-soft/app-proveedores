@@ -3,6 +3,8 @@ import Auth from "./auth.model";
 import Agent from "./agent.model";
 import Sucursal from "./sucursal.model";
 import Product from "./product.model";
+import Color from "./color.model";
+import Size from "./size.model";
 import List from "./list.model";
 import Price from "./price.model";
 import Stock from "./stock.model";
@@ -26,6 +28,14 @@ Agent.hasMany(Ticket);
 
 Sucursal.hasMany(Ticket);
 
+// SIZE
+
+Size.hasMany(Product);
+
+// COLOR
+
+Color.hasMany(Product);
+
 // STOCK
 
 Product.belongsToMany(Sucursal, {
@@ -37,7 +47,13 @@ Sucursal.belongsToMany(Product, {
   onDelete: "CASCADE",
 });
 
-// PRICES
+// SUPER MANY-TO-MANY RELATION
+Product.hasMany(Stock);
+Stock.belongsTo(Product);
+Sucursal.hasMany(Stock);
+Stock.belongsTo(Sucursal);
+
+// PRICE
 
 Product.belongsToMany(List, {
   through: Price,
@@ -47,6 +63,9 @@ List.belongsToMany(Product, {
   through: Price,
   onDelete: "CASCADE",
 });
+
+Price.belongsTo(List);
+Price.belongsTo(Product);
 
 Price.hasMany(Ticket);
 
@@ -60,6 +79,11 @@ Ticket.belongsToMany(Product, {
   through: TicketProduct,
   onDelete: "CASCADE",
 });
+
+// PRODUCT
+
+Product.belongsTo(Size);
+Product.belongsTo(Color);
 
 // TICKET
 

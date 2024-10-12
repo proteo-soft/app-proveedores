@@ -1,6 +1,6 @@
 import { BaseDAO } from "./base.dao";
 
-import Agent from "@models/agent.model";
+import Agent from "../models/agent.model";
 
 class AgentDAO extends BaseDAO<Agent> {
   constructor() {

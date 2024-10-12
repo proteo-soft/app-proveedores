@@ -1,6 +1,6 @@
 import { BaseDAO } from "./base.dao";
 
-import Auth from "@models/auth.model";
+import Auth from "../models/auth.model";
 
 class AuthDAO extends BaseDAO<Auth> {
   constructor() {

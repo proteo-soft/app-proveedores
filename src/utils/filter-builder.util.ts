@@ -1,3 +1,13 @@
+export function deleteUndefinedProps(obj) {
+  for (const prop in obj) {
+    if (obj[prop] === undefined) {
+      delete obj[prop];
+    }
+  }
+
+  return obj;
+}
+
 export function filterBuilder(opt) {
   const { limit, offset, ...where } = opt;
 
@@ -7,7 +17,7 @@ export function filterBuilder(opt) {
   const filters = {
     limit: opt.limit,
     offset: opt.offset,
-    where: where,
+    where: deleteUndefinedProps(where),
   };
 
   return filters;

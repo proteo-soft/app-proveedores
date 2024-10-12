@@ -1,6 +1,6 @@
 import { BaseDAO } from "./base.dao";
 
-import price from "@models/price.model";
+import price from "../models/price.model";
 
 class priceDAO extends BaseDAO<price> {
   constructor() {

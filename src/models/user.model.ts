@@ -3,7 +3,7 @@ import { IUserCreation } from "../interfaces/models/user.interface";
 
 class User extends Model implements IUserCreation {
   declare id: number;
-  declare fullname: string;
+  declare fullName: string;
   declare email: string;
   declare role: number;
   declare isActive: boolean;

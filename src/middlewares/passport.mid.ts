@@ -10,7 +10,7 @@ import { createToken } from "../utils/jwt.util";
 import CustomError from "../utils/errors/customError";
 
 import { validateAuth, AuthShape } from "../utils/schemas";
-import { IUser } from "@interfaces/models/user.interface";
+import { IUser } from "../interfaces/models/user.interface";
 
 passport.use(
   "register",

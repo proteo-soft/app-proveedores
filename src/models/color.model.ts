@@ -1,17 +1,17 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
-import { IListCreation } from "../interfaces/models/list.interface";
 
-class List extends Model implements IListCreation {
+import { IColorCreation } from "../interfaces/models/color.interface";
+
+class Color extends Model implements IColorCreation {
   declare id: number;
   declare name: string;
-  declare isActive: boolean;
 
   // Timestamps
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 }
 
-List.init(
+Color.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -19,22 +19,16 @@ List.init(
       primaryKey: true,
       allowNull: false,
     },
-
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-
-    isActive: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true,
+      unique: true,
     },
   },
   {
     sequelize,
-    modelName: "list",
+    modelName: "color",
   }
 );
 
-export default List;
+export default Color;

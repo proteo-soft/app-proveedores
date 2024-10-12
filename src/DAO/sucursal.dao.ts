@@ -1,6 +1,6 @@
 import { BaseDAO } from "./base.dao";
 
-import Sucursal from "@models/sucursal.model";
+import Sucursal from "../models/sucursal.model";
 
 class SucursalDAO extends BaseDAO<Sucursal> {
   constructor() {

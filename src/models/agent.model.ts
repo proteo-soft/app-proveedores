@@ -1,6 +1,6 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
 
-import { IAgentCreation } from "@interfaces/models/agent.interface";
+import { IAgentCreation } from "../interfaces/models/agent.interface";
 
 class Agent extends Model implements IAgentCreation {
   declare id: number;

@@ -1,7 +1,7 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
 import { Product, List } from "./index.model";
 
-import { IPriceCreation } from "@interfaces/models/price.interface";
+import { IPriceCreation } from "../interfaces/models/price.interface";
 
 class Price extends Model implements IPriceCreation {
   declare id: number;

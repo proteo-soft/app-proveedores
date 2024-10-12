@@ -4,7 +4,7 @@ import { Router } from "express";
 
 // CONTROLLER
 
-import Db from "@controllers/db.controller";
+import Db from "../controllers/db.controller";
 
 // ROUTES
 

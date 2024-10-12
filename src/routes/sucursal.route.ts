@@ -1,5 +1,5 @@
 import { Router } from "express";
-import SucursalController from "@controllers/sucursal.controller";
+import SucursalController from "../controllers/sucursal.controller";
 
 const sucursalRouter = Router();
 

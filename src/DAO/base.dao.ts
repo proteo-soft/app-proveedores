@@ -1,5 +1,11 @@
-import { Attributes, Model, ModelStatic, WhereOptions } from "sequelize";
-import CustomError from "@utils/errors/customError";
+import {
+  Attributes,
+  Model,
+  ModelStatic,
+  Transaction,
+  WhereOptions,
+} from "sequelize";
+import CustomError from "../utils/errors/customError";
 
 export abstract class BaseDAO<T extends Model> {
   private _model: ModelStatic<T>;
@@ -17,7 +23,7 @@ export abstract class BaseDAO<T extends Model> {
       const data = await this._model.findOne(filters);
       if (!data)
         CustomError.new({
-          message: "No existe información para mostrar",
+          message: `No hay resultados de ${this._model.name}`,
           data: "",
           statusCode: 404,
         });
@@ -31,9 +37,10 @@ export abstract class BaseDAO<T extends Model> {
   async findById(id: number) {
     try {
       const data = await this._model.findByPk(id);
+
       if (!data)
         CustomError.new({
-          message: "No existe información para mostrar",
+          message: `No hay resultados de ${this._model.name}`,
           data: "",
           statusCode: 404,
         });
@@ -50,7 +57,7 @@ export abstract class BaseDAO<T extends Model> {
 
       if (data.count == 0)
         CustomError.new({
-          message: "No existe información para mostrar",
+          message: `No hay resultados de ${this._model.name}`,
           data: "",
           statusCode: 404,
         });
@@ -69,6 +76,14 @@ export abstract class BaseDAO<T extends Model> {
     }
   }
 
+  async bulkCreate(data: Attributes<T>) {
+    try {
+      return await this._model.bulkCreate(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async update(where: WhereOptions, data: Partial<T>) {
     try {
       const [affectedRows] = await this._model.update(data, {
@@ -76,6 +91,20 @@ export abstract class BaseDAO<T extends Model> {
       });
 
       return affectedRows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateOrCreate(where: WhereOptions, data) {
+    try {
+      const [row, created] = await this._model.findOrCreate({
+        where,
+        defaults: data,
+      });
+
+      await row.update(data);
+      return 1;
     } catch (error) {
       throw error;
     }
@@ -89,7 +118,7 @@ export abstract class BaseDAO<T extends Model> {
 
       if (affectedCount == 0)
         CustomError.new({
-          message: "No se encontró el elemento solicitado",
+          message: `No hay resultados de ${this._model.name}`,
           data: "",
           statusCode: 404,
         });

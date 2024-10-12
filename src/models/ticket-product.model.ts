@@ -1,7 +1,7 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
 import { Ticket, Product } from "./index.model";
 
-import { ITicketProductCreation } from "@interfaces/models/ticket-product.interface";
+import { ITicketProductCreation } from "../interfaces/models/ticket-product.interface";
 
 class TicketProduct extends Model implements ITicketProductCreation {
   declare id: number;

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const usersSchema = z
   .object({
-    fullname: z
+    fullName: z
       .string({
         invalid_type_error: "El nombre debe ser de tipo texto",
         required_error: "El campo es requerido",
