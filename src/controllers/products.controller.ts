@@ -12,7 +12,7 @@ class ProductsController {
     }
   }
 
-  static async read(req: Request, res: Response, next: NextFunction) {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       const products = await Products.getAll(req.query);
 
@@ -22,15 +22,15 @@ class ProductsController {
     }
   }
 
-  // static async readOne(req: Request, res: Response, next: NextFunction) {
-  //   try {
-  //     const product = await Products.getById(req.params.id);
+  static async getById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const product = await Products.getById(req.params.id);
 
-  //     res.status(200).json({ data: product });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+      res.status(200).json({ data: product });
+    } catch (error) {
+      next(error);
+    }
+  }
 
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
@@ -99,6 +99,16 @@ class ProductsController {
   static async getPricesById(req: Request, res: Response, next: NextFunction) {
     try {
       const products = await Products.getPricesById(req.params.id, req.query);
+
+      res.status(200).json({ data: products });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getPrices(req: Request, res: Response, next: NextFunction) {
+    try {
+      const products = await Products.getPrices(req.query);
 
       res.status(200).json({ data: products });
     } catch (error) {

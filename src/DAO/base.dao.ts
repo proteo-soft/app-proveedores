@@ -34,9 +34,9 @@ export abstract class BaseDAO<T extends Model> {
     }
   }
 
-  async findById(id: number) {
+  async findById(id: number, opt?: { include: {}[] }) {
     try {
-      const data = await this._model.findByPk(id);
+      const data = await this._model.findByPk(id, opt);
 
       if (!data)
         CustomError.new({
@@ -114,6 +114,7 @@ export abstract class BaseDAO<T extends Model> {
     try {
       const affectedCount = await this._model.destroy({
         where,
+        individualHooks: true,
       });
 
       if (affectedCount == 0)

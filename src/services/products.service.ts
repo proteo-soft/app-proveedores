@@ -104,7 +104,16 @@ export default class ProductsService {
     try {
       return await Products.getPrices({
         productId: parseInt(productId),
+        ...query,
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getPrices(query) {
+    try {
+      return await Products.getPrices(query);
     } catch (error) {
       throw error;
     }

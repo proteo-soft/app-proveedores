@@ -1,8 +1,9 @@
 import { Op } from "../database/connect";
 
 import productsDAO from "../DAO/product.dao";
-import stockDAO from "../DAO/stock.dao";
 import sucursalDAO from "../DAO/sucursal.dao"; // usar el repo de suc
+import stockDAO from "../DAO/stock.dao";
+import priceDao from "src/DAO/price.dao";
 
 import SucursalRepository from "./sucursal.rep";
 import ListsRepository from "./lists.rep";
@@ -38,11 +39,13 @@ class ProductsRepository {
 
   static async create(data) {
     try {
+      // si busco un producto X sucursal, me filtra
       const { stock: units, sucursalId, ...productData } = data;
 
       const suc1 = (await sucursalDAO.findById(sucursalId))!;
       const newProduct = await productsDAO.create(productData);
 
+      // ver ventahjas/desventajas de que al crear un producto se cree autoamticamente el stock en todas las sucursales o ir creando de a poco.
       if (units)
         await StockRepository.create({
           stock: units,
@@ -64,10 +67,14 @@ class ProductsRepository {
         include: [
           {
             model: stockDAO.model,
-            where: deleteUndefinedProps({
-              sucursalId: opt.sucursalId,
-            }),
+            // where: deleteUndefinedProps({
+            //   sucursalId: opt.sucursalId,
+            // }),
             attributes: ["sucursalId", "stock"],
+          },
+          {
+            model: priceDao.model,
+            attributes: ["listId", "price"],
           },
         ],
       });
@@ -78,7 +85,18 @@ class ProductsRepository {
 
   static async getById(id: number) {
     try {
-      return await productsDAO.findById(id);
+      return await productsDAO.findById(id, {
+        include: [
+          {
+            model: stockDAO.model,
+            attributes: ["sucursalId", "stock"],
+          },
+          {
+            model: priceDao.model,
+            attributes: ["listId", "price"],
+          },
+        ],
+      });
     } catch (error) {
       throw checkErrorType(error);
     }

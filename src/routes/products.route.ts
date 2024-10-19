@@ -1,22 +1,25 @@
 import { Router } from "express";
 import ProductsController from "../controllers/products.controller";
 
-const productsRouter = Router();
+const router = Router();
 
-productsRouter.post("/", ProductsController.create);
+router.post("/", ProductsController.create);
 
-productsRouter.post("/list", ProductsController.createList);
-productsRouter.post("/:id/prices", ProductsController.setPricesById);
+router.post("/list", ProductsController.createList);
+router.delete("/list/:id", ProductsController.deleteListById);
 
-productsRouter.get("/", ProductsController.read);
+router.post("/:id/prices", ProductsController.setPricesById);
+router.get("/prices", ProductsController.getPrices);
+router.get("/:id/prices", ProductsController.getPricesById);
 
-productsRouter.get("/:id/stock", ProductsController.getStockById);
-productsRouter.get("/:id/prices", ProductsController.getPricesById);
+router.get("/:id/stock", ProductsController.getStockById);
 
-productsRouter.patch("/", ProductsController.update);
-productsRouter.patch("/:id", ProductsController.updateById);
+router.get("/", ProductsController.getAll);
+router.get("/:id", ProductsController.getById);
 
-productsRouter.delete("/:id", ProductsController.delete);
-productsRouter.delete("/list/:id", ProductsController.deleteListById);
+router.patch("/", ProductsController.update);
+router.patch("/:id", ProductsController.updateById);
 
-export default productsRouter;
+router.delete("/:id", ProductsController.delete);
+
+export default router;
