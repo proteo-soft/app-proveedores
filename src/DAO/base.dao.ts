@@ -36,7 +36,9 @@ export abstract class BaseDAO<T extends Model> {
 
   async findById(id: number, opt?: { include: {}[] }) {
     try {
+
       const data = await this._model.findByPk(id, opt);
+
 
       if (!data)
         CustomError.new({

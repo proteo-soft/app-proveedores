@@ -12,6 +12,7 @@ class ProductsController {
     }
   }
 
+
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       const products = await Products.getAll(req.query);
@@ -22,19 +23,20 @@ class ProductsController {
     }
   }
 
+
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const product = await Products.getById(req.params.id);
 
       res.status(200).json({ data: product });
     } catch (error) {
-      next(error);
+     next(error);
     }
   }
 
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const products = await Products.update(req.body); //metodoupdate
+      const products = await Products.update(req.body); 
 
       res.status(200).json({ data: products });
     } catch (error) {
@@ -49,17 +51,17 @@ class ProductsController {
         req.body,
         req.query
       );
-
+      
       res.status(200).json({ data: products });
     } catch (error) {
       next(error);
     }
   }
-
+  
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const products = await Products.deleteById(req.params.id);
-
+      
       res.status(200).json({ data: products });
     } catch (error) {
       next(error);

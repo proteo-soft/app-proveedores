@@ -3,7 +3,7 @@ import { Op } from "../database/connect";
 import productsDAO from "../DAO/product.dao";
 import sucursalDAO from "../DAO/sucursal.dao"; // usar el repo de suc
 import stockDAO from "../DAO/stock.dao";
-import priceDao from "src/DAO/price.dao";
+import priceDao from "../DAO/price.dao";
 
 import SucursalRepository from "./sucursal.rep";
 import ListsRepository from "./lists.rep";
@@ -39,13 +39,13 @@ class ProductsRepository {
 
   static async create(data) {
     try {
-      // si busco un producto X sucursal, me filtra
       const { stock: units, sucursalId, ...productData } = data;
 
       const suc1 = (await sucursalDAO.findById(sucursalId))!;
       const newProduct = await productsDAO.create(productData);
 
       // ver ventahjas/desventajas de que al crear un producto se cree autoamticamente el stock en todas las sucursales o ir creando de a poco.
+
       if (units)
         await StockRepository.create({
           stock: units,
@@ -122,7 +122,6 @@ class ProductsRepository {
           if (!sucursalIds.includes(where.sucursalId)) {
             // valido si existe esa sucursal antes de agregar/modificar
             await sucursalDAO.findById(where.sucursalId as number);
-
             sucursalIds.push(where.sucursalId);
           }
 
@@ -131,6 +130,8 @@ class ProductsRepository {
               stock: units,
             });
 
+            sucursalIds.push(where.sucursalId);
+          
             if (!changed) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla stock
           } catch (error) {
             idsNotModified.push(productData.id);
