@@ -40,11 +40,9 @@ Color.hasMany(Product);
 
 Product.belongsToMany(Sucursal, {
   through: Stock,
-  onDelete: "CASCADE",
 });
 Sucursal.belongsToMany(Product, {
   through: Stock,
-  onDelete: "CASCADE",
 });
 
 // SUPER MANY-TO-MANY RELATION
@@ -57,15 +55,15 @@ Stock.belongsTo(Sucursal);
 
 Product.belongsToMany(List, {
   through: Price,
-  onDelete: "CASCADE",
 });
 List.belongsToMany(Product, {
   through: Price,
-  onDelete: "CASCADE",
 });
 
-Price.belongsTo(List);
+Product.hasMany(Price);
 Price.belongsTo(Product);
+List.hasMany(Price);
+Price.belongsTo(List);
 
 Price.hasMany(Ticket);
 
@@ -73,11 +71,9 @@ Price.hasMany(Ticket);
 
 Product.belongsToMany(Ticket, {
   through: TicketProduct,
-  onDelete: "CASCADE",
 });
 Ticket.belongsToMany(Product, {
   through: TicketProduct,
-  onDelete: "CASCADE",
 });
 
 // PRODUCT

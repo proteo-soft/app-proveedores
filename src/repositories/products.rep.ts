@@ -1,8 +1,9 @@
 import { Op } from "../database/connect";
 
 import productsDAO from "../DAO/product.dao";
-import stockDAO from "../DAO/stock.dao";
 import sucursalDAO from "../DAO/sucursal.dao"; // usar el repo de suc
+import stockDAO from "../DAO/stock.dao";
+import priceDao from "../DAO/price.dao";
 
 import SucursalRepository from "./sucursal.rep";
 import ListsRepository from "./lists.rep";
@@ -43,6 +44,8 @@ class ProductsRepository {
       const suc1 = (await sucursalDAO.findById(sucursalId))!;
       const newProduct = await productsDAO.create(productData);
 
+      // ver ventahjas/desventajas de que al crear un producto se cree autoamticamente el stock en todas las sucursales o ir creando de a poco.
+
       if (units)
         await StockRepository.create({
           stock: units,
@@ -64,10 +67,14 @@ class ProductsRepository {
         include: [
           {
             model: stockDAO.model,
-            where: deleteUndefinedProps({
-              sucursalId: opt.sucursalId,
-            }),
+            // where: deleteUndefinedProps({
+            //   sucursalId: opt.sucursalId,
+            // }),
             attributes: ["sucursalId", "stock"],
+          },
+          {
+            model: priceDao.model,
+            attributes: ["listId", "price"],
           },
         ],
       });
@@ -78,7 +85,18 @@ class ProductsRepository {
 
   static async getById(id: number) {
     try {
-      return await productsDAO.findById(id);
+      return await productsDAO.findById(id, {
+        include: [
+          {
+            model: stockDAO.model,
+            attributes: ["sucursalId", "stock"],
+          },
+          {
+            model: priceDao.model,
+            attributes: ["listId", "price"],
+          },
+        ],
+      });
     } catch (error) {
       throw checkErrorType(error);
     }
@@ -104,7 +122,6 @@ class ProductsRepository {
           if (!sucursalIds.includes(where.sucursalId)) {
             // valido si existe esa sucursal antes de agregar/modificar
             await sucursalDAO.findById(where.sucursalId as number);
-
             sucursalIds.push(where.sucursalId);
           }
 
@@ -113,6 +130,8 @@ class ProductsRepository {
               stock: units,
             });
 
+            sucursalIds.push(where.sucursalId);
+          
             if (!changed) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla stock
           } catch (error) {
             idsNotModified.push(productData.id);

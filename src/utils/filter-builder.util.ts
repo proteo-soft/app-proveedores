@@ -11,7 +11,7 @@ export function deleteUndefinedProps(obj) {
 export function filterBuilder(opt) {
   const { limit, offset, ...where } = opt;
 
-  if (!limit || limit > 50) opt.limit = 50;
+  if (!limit || limit > 50) opt.limit = 20;
   if (!offset) opt.offset = 0;
 
   const filters = {
