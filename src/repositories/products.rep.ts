@@ -12,13 +12,10 @@ import StockRepository from "./stock.rep";
 
 import { IProductUpdate } from "../interfaces/models/product.interface";
 
-import {
-  deleteUndefinedProps,
-  filterBuilder,
-} from "../utils/filter-builder.util";
-import { removeDuplicates } from "../utils/remove-duplicates.util";
-import { checkMissingIds } from "../utils/check-missings";
-import { checkErrorType } from "../utils/check-error-type.util";
+import { filterBuilder } from "@utils/filter-builder.util";
+import { removeDuplicates } from "@utils/remove-duplicates.util";
+import { checkMissingIds } from "@utils/check-missings";
+import { checkErrorType } from "@utils/errors/check-error-type.util";
 
 class ProductsRepository {
   static async checkMissings(idsToSearch: number[]) {
@@ -80,9 +77,6 @@ class ProductsRepository {
         include: [
           {
             model: stockDAO.model,
-            // where: deleteUndefinedProps({
-            //   sucursalId: opt.sucursalId,
-            // }),
             attributes: ["sucursalId", "stock"],
           },
           {

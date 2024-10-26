@@ -2,8 +2,8 @@ import { Op } from "../database/connect";
 
 import lists from "../DAO/list.dao";
 
-import { filterBuilder } from "../utils/filter-builder.util";
-import { checkMissingIds } from "../utils/check-missings";
+import { filterBuilder } from "@utils/filter-builder.util";
+import { checkMissingIds } from "@utils/check-missings";
 
 class ListsRepository {
   static async checkMissings(idsToSearch) {

@@ -1,4 +1,4 @@
-import "./utils/env-action.util";
+import "@utils/env-action.util";
 import app from "./app";
 
 const PORT = process.env.PORT;

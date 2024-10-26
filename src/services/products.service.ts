@@ -1,10 +1,11 @@
 import Products from "../repositories/products.rep";
+import Colors from "../repositories/colors.rep";
+import Sizes from "../repositories/sizes.rep";
 
-import { validateProduct } from "../utils/schemas";
-import { IProductCreation } from "../interfaces/models/product.interface";
+import { validateProduct } from "@utils/schemas";
 
-import CustomError from "../utils/errors/customError";
-import { deleteUndefinedProps } from "../utils/filter-builder.util";
+import CustomError from "@utils/errors/customError";
+import { deleteUndefinedProps } from "@utils/filter-builder.util";
 
 export default class ProductsService {
   static async create(data, opt) {
@@ -28,6 +29,51 @@ export default class ProductsService {
         products,
         sucursalId: opt.sucursalId,
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getAll(data) {
+    try {
+      return await Products.getAll(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getById(id: string) {
+    try {
+      return await Products.getById(parseInt(id));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async update(data) {
+    try {
+      //validar porque se cuelga cuando hay campos inexistentes
+      return data.type == "individual"
+        ? await Products.individualBulkUpdateById(data.products)
+        : await Products.linealBulkUpdateById(data.where, data.updates);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async updateById(id: string, data, query) {
+    try {
+      return await Products.individualBulkUpdateById([
+        { ...query, ...data, id: parseInt(id) },
+      ]);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteById(id: string) {
+    try {
+      return await Products.delete(parseInt(id));
     } catch (error) {
       throw error;
     }
@@ -59,28 +105,73 @@ export default class ProductsService {
     }
   }
 
-  static async getAll(data) {
+  // COLORS
+
+  static async createColor(data) {
     try {
-      return await Products.getAll(data);
+      //validar
+
+      await Colors.create(data);
     } catch (error) {
       throw error;
     }
   }
 
-  static async getById(id: string) {
+  static async getColors(query) {
     try {
-      return await Products.getById(parseInt(id));
+      return await Colors.getAll(query);
     } catch (error) {
       throw error;
     }
   }
 
-  static async update(data) {
+  static async updateColorById(id: string, data) {
     try {
-      //validar porque se cuelga cuando hay campos inexistentes
-      return data.type == "individual"
-        ? await Products.individualBulkUpdateById(data.products)
-        : await Products.linealBulkUpdateById(data.where, data.updates);
+      return await Colors.updateById(parseInt(id), data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteColorById(colorId: string) {
+    try {
+      await Colors.deleteById(parseInt(colorId));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // SIZES
+
+  static async createSize(data) {
+    try {
+      //validar
+
+      await Sizes.create(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async updateSizeById(id: string, data) {
+    try {
+      return await Sizes.updateById(parseInt(id), data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getSizes(query) {
+    try {
+      return await Sizes.getAll(query);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteSizeById(sizeId: string) {
+    try {
+      await Sizes.deleteById(parseInt(sizeId));
     } catch (error) {
       throw error;
     }
@@ -129,24 +220,6 @@ export default class ProductsService {
   static async getPrices(query) {
     try {
       return await Products.getPrices(query);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async updateById(id: string, data, query) {
-    try {
-      return await Products.individualBulkUpdateById([
-        { ...query, ...data, id: parseInt(id) },
-      ]);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async deleteById(id: string) {
-    try {
-      return await Products.delete(parseInt(id));
     } catch (error) {
       throw error;
     }

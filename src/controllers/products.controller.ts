@@ -72,9 +72,33 @@ class ProductsController {
 
   static async createColors(req: Request, res: Response, next: NextFunction) {
     try {
-      await Products.createList(req.body);
+      await Products.createColor(req.body);
 
-      res.status(201).json({ message: "Lista creada exitosamente" });
+      res.status(201).json({ message: "Color creado exitosamente" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getColors(req: Request, res: Response, next: NextFunction) {
+    try {
+      const colors = await Products.getColors(req.query);
+
+      res.status(200).json({ data: colors });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async updateColorById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const color = await Products.updateColorById(req.params.id, req.body);
+
+      res.status(200).json({ data: color });
     } catch (error) {
       next(error);
     }
@@ -86,9 +110,9 @@ class ProductsController {
     next: NextFunction
   ) {
     try {
-      const products = await Products.deleteListById(req.params.id);
+      await Products.deleteColorById(req.params.id);
 
-      res.status(200).json({ data: products });
+      res.status(200).json({ message: "Color eliminado exitosamente" });
     } catch (error) {
       next(error);
     }
@@ -98,9 +122,29 @@ class ProductsController {
 
   static async createSizes(req: Request, res: Response, next: NextFunction) {
     try {
-      await Products.createList(req.body);
+      await Products.createSize(req.body);
 
-      res.status(201).json({ message: "Lista creada exitosamente" });
+      res.status(201).json({ message: "Talle creado exitosamente" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getSizes(req: Request, res: Response, next: NextFunction) {
+    try {
+      const sizes = await Products.getSizes(req.query);
+
+      res.status(200).json({ data: sizes });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async updateSizeById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const size = await Products.updateSizeById(req.params.id, req.body);
+
+      res.status(200).json({ data: size });
     } catch (error) {
       next(error);
     }
@@ -108,9 +152,9 @@ class ProductsController {
 
   static async deleteSizeById(req: Request, res: Response, next: NextFunction) {
     try {
-      const products = await Products.deleteListById(req.params.id);
+      await Products.deleteSizeById(req.params.id);
 
-      res.status(200).json({ data: products });
+      res.status(200).json({ message: "Talle eliminado exitosamente" });
     } catch (error) {
       next(error);
     }
@@ -128,21 +172,21 @@ class ProductsController {
     }
   }
 
-  static async deleteListById(req: Request, res: Response, next: NextFunction) {
-    try {
-      const products = await Products.deleteListById(req.params.id);
-
-      res.status(200).json({ data: products });
-    } catch (error) {
-      next(error);
-    }
-  }
-
   static async getLists(req: Request, res: Response, next: NextFunction) {
     try {
       const lists = await Products.getLists(req.query);
 
       res.status(200).json({ data: lists });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async deleteListById(req: Request, res: Response, next: NextFunction) {
+    try {
+      await Products.deleteListById(req.params.id);
+
+      res.status(200).json({ message: "Lista elimnada exitosamente" });
     } catch (error) {
       next(error);
     }

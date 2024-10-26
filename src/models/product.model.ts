@@ -34,6 +34,7 @@ Product.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      unique: true,
     },
     name: {
       type: DataTypes.STRING,
@@ -87,6 +88,18 @@ Product.init(
   {
     sequelize,
     modelName: "product",
+    hooks: {
+      async beforeDestroy(row, opt) {
+        const model = opt["model"];
+        // const product = await model.findOne({
+        //   where: { id: row.dataValues.id },
+        //   include: [{ all: true }],
+        // });
+        console.log("estoy en model de product ");
+
+        // throw new Error("hola");
+      },
+    },
   }
 );
 

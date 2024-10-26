@@ -10,9 +10,13 @@ router.get("/lists", ProductsController.getLists);
 router.delete("/lists/:id", ProductsController.deleteListById);
 
 router.post("/colors", ProductsController.createColors);
+router.get("/colors", ProductsController.getColors);
+router.patch("/colors/:id", ProductsController.updateColorById);
 router.delete("/colors/:id", ProductsController.deleteColorById);
 
 router.post("/sizes", ProductsController.createSizes);
+router.get("/sizes", ProductsController.getSizes);
+router.patch("/sizes/:id", ProductsController.updateSizeById);
 router.delete("/sizes/:id", ProductsController.deleteSizeById);
 
 router.post("/:id/prices", ProductsController.setPricesById);

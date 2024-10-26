@@ -5,7 +5,7 @@ import {
   Transaction,
   WhereOptions,
 } from "sequelize";
-import CustomError from "../utils/errors/customError";
+import CustomError from "@utils/errors/customError";
 
 export abstract class BaseDAO<T extends Model> {
   private _model: ModelStatic<T>;
@@ -36,9 +36,7 @@ export abstract class BaseDAO<T extends Model> {
 
   async findById(id: number, opt?: { include: {}[] }) {
     try {
-
       const data = await this._model.findByPk(id, opt);
-
 
       if (!data)
         CustomError.new({

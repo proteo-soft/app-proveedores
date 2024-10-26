@@ -1,11 +1,11 @@
 import { BaseDAO } from "./base.dao";
 
-import Size from "../models/size.model";
+import Color from "../models/color.model";
 
-class SizeDAO extends BaseDAO<Size> {
+class ColorDAO extends BaseDAO<Color> {
   constructor() {
-    super(Size);
+    super(Color);
   }
 }
 
-export default new SizeDAO();
+export default new ColorDAO();

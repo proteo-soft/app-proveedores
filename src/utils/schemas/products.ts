@@ -20,7 +20,8 @@ const productsSchema = z.object({
       message: "El stock tiene que ser positivo",
     })
     .int()
-    .optional(),
+    .optional()
+    .default(0),
 
   cost: z
     .number({
