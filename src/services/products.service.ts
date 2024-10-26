@@ -9,16 +9,23 @@ import { deleteUndefinedProps } from "../utils/filter-builder.util";
 export default class ProductsService {
   static async create(data, opt) {
     try {
-      const result = validateProduct(data);
-      if (!result.success)
-        CustomError.new({
-          message: "La petición contiene campos inválidos",
-          data: result.error,
-          statusCode: 400,
-        });
+      const products: object[] = [];
 
-      return await Products.create({
-        ...result.data,
+      for (const product of data.products) {
+        const result = validateProduct(product);
+
+        if (!result.success)
+          CustomError.new({
+            message: "La petición contiene campos inválidos",
+            data: result.error,
+            statusCode: 400,
+          });
+
+        products.push(product);
+      }
+
+      return await Products.bulkCreate({
+        products,
         sucursalId: opt.sucursalId,
       });
     } catch (error) {
@@ -31,6 +38,14 @@ export default class ProductsService {
       //validar
 
       await Products.createList(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getLists(query) {
+    try {
+      return await Products.getLists(query);
     } catch (error) {
       throw error;
     }

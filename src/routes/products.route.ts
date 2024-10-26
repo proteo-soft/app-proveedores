@@ -5,9 +5,15 @@ const router = Router();
 
 router.post("/", ProductsController.create);
 
+router.post("/lists", ProductsController.createList);
+router.get("/lists", ProductsController.getLists);
+router.delete("/lists/:id", ProductsController.deleteListById);
 
-router.post("/list", ProductsController.createList);
-router.delete("/list/:id", ProductsController.deleteListById);
+router.post("/colors", ProductsController.createColors);
+router.delete("/colors/:id", ProductsController.deleteColorById);
+
+router.post("/sizes", ProductsController.createSizes);
+router.delete("/sizes/:id", ProductsController.deleteSizeById);
 
 router.post("/:id/prices", ProductsController.setPricesById);
 router.get("/prices", ProductsController.getPrices);

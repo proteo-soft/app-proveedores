@@ -37,21 +37,34 @@ class ProductsRepository {
     }
   }
 
+  static async bulkCreate(data) {
+    try {
+      for (const product of data.products) {
+        await this.create({ ...product, sucursalId: data.sucursalId });
+      }
+    } catch (error) {
+      throw checkErrorType(error);
+    }
+  }
+
   static async create(data) {
     try {
       const { stock: units, sucursalId, ...productData } = data;
+      let sucursal;
 
-      const suc1 = (await sucursalDAO.findById(sucursalId))!;
+      if (units && sucursalId)
+        sucursal = await sucursalDAO.findById(sucursalId);
+
       const newProduct = await productsDAO.create(productData);
-
       // ver ventahjas/desventajas de que al crear un producto se cree autoamticamente el stock en todas las sucursales o ir creando de a poco.
 
-      if (units)
+      if (sucursal) {
         await StockRepository.create({
           stock: units,
-          sucursalId: suc1.id,
+          sucursalId: sucursal.id,
           productId: newProduct.id,
         });
+      }
     } catch (error) {
       throw checkErrorType(error);
     }
@@ -131,7 +144,7 @@ class ProductsRepository {
             });
 
             sucursalIds.push(where.sucursalId);
-          
+
             if (!changed) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla stock
           } catch (error) {
             idsNotModified.push(productData.id);
@@ -193,6 +206,14 @@ class ProductsRepository {
   static async createList(data) {
     try {
       await ListsRepository.create(data);
+    } catch (error) {
+      throw checkErrorType(error);
+    }
+  }
+
+  static async getLists(where) {
+    try {
+      return await ListsRepository.getAll(where);
     } catch (error) {
       throw checkErrorType(error);
     }

@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import Products from "../services/products.service";
 
 class ProductsController {
+  // PRODUCT
+
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       await Products.create(req.body, req.query);
@@ -11,7 +13,6 @@ class ProductsController {
       next(error);
     }
   }
-
 
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
@@ -23,20 +24,19 @@ class ProductsController {
     }
   }
 
-
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const product = await Products.getById(req.params.id);
 
       res.status(200).json({ data: product });
     } catch (error) {
-     next(error);
+      next(error);
     }
   }
 
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const products = await Products.update(req.body); 
+      const products = await Products.update(req.body);
 
       res.status(200).json({ data: products });
     } catch (error) {
@@ -51,18 +51,78 @@ class ProductsController {
         req.body,
         req.query
       );
-      
+
       res.status(200).json({ data: products });
     } catch (error) {
       next(error);
     }
   }
-  
+
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const products = await Products.deleteById(req.params.id);
-      
+
       res.status(200).json({ data: products });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // COLORS
+
+  static async createColors(req: Request, res: Response, next: NextFunction) {
+    try {
+      await Products.createList(req.body);
+
+      res.status(201).json({ message: "Lista creada exitosamente" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async deleteColorById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const products = await Products.deleteListById(req.params.id);
+
+      res.status(200).json({ data: products });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // SIZES
+
+  static async createSizes(req: Request, res: Response, next: NextFunction) {
+    try {
+      await Products.createList(req.body);
+
+      res.status(201).json({ message: "Lista creada exitosamente" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async deleteSizeById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const products = await Products.deleteListById(req.params.id);
+
+      res.status(200).json({ data: products });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // LISTS
+
+  static async createList(req: Request, res: Response, next: NextFunction) {
+    try {
+      await Products.createList(req.body);
+
+      res.status(201).json({ message: "Lista creada exitosamente" });
     } catch (error) {
       next(error);
     }
@@ -78,15 +138,17 @@ class ProductsController {
     }
   }
 
-  static async createList(req: Request, res: Response, next: NextFunction) {
+  static async getLists(req: Request, res: Response, next: NextFunction) {
     try {
-      await Products.createList(req.body);
+      const lists = await Products.getLists(req.query);
 
-      res.status(201).json({ message: "Lista creada exitosamente" });
+      res.status(200).json({ data: lists });
     } catch (error) {
       next(error);
     }
   }
+
+  // PRICES
 
   static async setPricesById(req: Request, res: Response, next: NextFunction) {
     try {
@@ -117,6 +179,8 @@ class ProductsController {
       next(error);
     }
   }
+
+  // STOCK
 
   static async getStockById(req: Request, res: Response, next: NextFunction) {
     try {
