@@ -3,6 +3,7 @@ import { validateUser, UserShape } from "./users";
 import { validateAgent } from "./agent";
 import { validateAuth, AuthShape } from "./auth";
 import { validateSucursal } from "./sucursal";
+import { PricesShape, validatePrices } from "./prices";
 
 export {
   validateProduct,
@@ -12,4 +13,6 @@ export {
   validateAuth,
   AuthShape,
   validateSucursal,
+  validatePrices,
+  PricesShape,
 };

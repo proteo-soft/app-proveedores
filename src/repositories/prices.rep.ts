@@ -2,13 +2,21 @@ import prices from "../DAO/price.dao";
 import ProductsRepository from "./products.rep";
 
 import List from "../models/list.model";
+import CustomError from "@utils/errors/customError";
 
 class PricesRepository {
   static async create(
     data: { productId: number; listId: number; price: number }[]
   ) {
     try {
-      return await prices.bulkCreate(data);
+      const pricesCreated = await prices.bulkCreate(data);
+
+      if (!pricesCreated.length)
+        CustomError.new({
+          message: "No se asignaron los precios",
+          statusCode: 400,
+          data: null,
+        });
     } catch (error) {
       throw error;
     }
@@ -34,7 +42,7 @@ class PricesRepository {
     }
   }
 
-  static async updateById(where, data) {
+  static async update(where, data) {
     try {
       return await prices.updateOrCreate(where, data);
     } catch (error) {

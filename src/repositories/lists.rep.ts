@@ -48,9 +48,9 @@ class ListsRepository {
     }
   }
 
-  static async updateById(id: number, data) {
+  static async update(where, data) {
     try {
-      return await lists.update({ id }, data);
+      return await lists.update(where, data);
     } catch (error) {
       throw error;
     }

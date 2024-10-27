@@ -19,9 +19,10 @@ router.get("/sizes", ProductsController.getSizes);
 router.patch("/sizes/:id", ProductsController.updateSizeById);
 router.delete("/sizes/:id", ProductsController.deleteSizeById);
 
-router.post("/:id/prices", ProductsController.setPricesById);
+router.post("/prices", ProductsController.setPrices);
 router.get("/prices", ProductsController.getPrices);
 router.get("/:id/prices", ProductsController.getPricesById);
+router.patch("/:id/prices", ProductsController.updatePricesById);
 
 router.get("/:id/stock", ProductsController.getStockById);
 

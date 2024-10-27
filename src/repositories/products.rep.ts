@@ -16,6 +16,7 @@ import { filterBuilder } from "@utils/filter-builder.util";
 import { removeDuplicates } from "@utils/remove-duplicates.util";
 import { checkMissingIds } from "@utils/check-missings";
 import { checkErrorType } from "@utils/errors/check-error-type.util";
+import CustomError from "@utils/errors/customError";
 
 class ProductsRepository {
   static async checkMissings(idsToSearch: number[]) {
@@ -29,16 +30,6 @@ class ProductsRepository {
       });
 
       checkMissingIds(listsFound.rows, idsToSearch);
-    } catch (error) {
-      throw checkErrorType(error);
-    }
-  }
-
-  static async bulkCreate(data) {
-    try {
-      for (const product of data.products) {
-        await this.create({ ...product, sucursalId: data.sucursalId });
-      }
     } catch (error) {
       throw checkErrorType(error);
     }
@@ -109,37 +100,59 @@ class ProductsRepository {
     }
   }
 
-  static async individualBulkUpdateById(data: IProductUpdate[]) {
+  static async individualBulkUpdateById(
+    data,
+    sucursalId: number | null = null
+  ) {
     try {
       const idsNotModified: number[] = [];
-      const sucursalIds: any = [];
+      let sucursalExists: boolean = false;
+      let listsNotFound: number[] = [];
 
       for (const product of data) {
         const {
           stock: units,
           listId,
-          sucursalId,
           price,
+          productId,
           ...productData
         } = product;
 
         if (units) {
           const where = { sucursalId, productId: productData.id };
 
-          if (!sucursalIds.includes(where.sucursalId)) {
+          if (!sucursalExists) {
             // valido si existe esa sucursal antes de agregar/modificar
-            await sucursalDAO.findById(where.sucursalId as number);
-            sucursalIds.push(where.sucursalId);
+            await sucursalDAO.findById(sucursalId as number);
+            sucursalExists = true;
           }
 
           try {
-            const changed = await StockRepository.updateById(where, {
+            const changed = await StockRepository.update(where, {
               stock: units,
             });
 
-            sucursalIds.push(where.sucursalId);
-
             if (!changed) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla stock
+          } catch (error) {
+            idsNotModified.push(productData.id);
+          }
+        }
+
+        if (listId && price) {
+          const where = { listId, productId };
+
+          if (!listsNotFound.includes(listId)) {
+            // valido si existe esa sucursal antes de agregar/modificar
+            await ListsRepository.getById(listId);
+            listsNotFound.push(listId);
+          }
+
+          try {
+            const changed = await PricesRepository.update(where, {
+              price,
+            });
+
+            if (!changed) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla prices
           } catch (error) {
             idsNotModified.push(productData.id);
           }
@@ -149,7 +162,7 @@ class ProductsRepository {
         if (Object.entries(productData).length == 0) continue;
 
         const affected = await productsDAO.update(
-          { id: productData.id },
+          { id: productId },
           productData
         );
         if (!affected) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla products
@@ -157,7 +170,13 @@ class ProductsRepository {
 
       const parsedIds = removeDuplicates(idsNotModified); // saco los ids duplicados
 
-      return { notFound: parsedIds };
+      if (parsedIds.length) {
+        CustomError.new({
+          message: "Algunos datos no se actualizaron",
+          data: parsedIds,
+          statusCode: 404,
+        });
+      }
     } catch (error) {
       throw checkErrorType(error);
     }

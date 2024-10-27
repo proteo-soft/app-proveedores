@@ -36,7 +36,7 @@ class ProductsController {
 
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const products = await Products.update(req.body);
+      const products = await Products.update(req.body, req.query);
 
       res.status(200).json({ data: products });
     } catch (error) {
@@ -194,9 +194,9 @@ class ProductsController {
 
   // PRICES
 
-  static async setPricesById(req: Request, res: Response, next: NextFunction) {
+  static async setPrices(req: Request, res: Response, next: NextFunction) {
     try {
-      await Products.setPricesById(req.params.id, req.body);
+      await Products.setPricesById(req.body);
 
       res.status(200).json({ message: "precios asignados correctamente" });
     } catch (error) {
@@ -219,6 +219,20 @@ class ProductsController {
       const products = await Products.getPrices(req.query);
 
       res.status(200).json({ data: products });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async updatePricesById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      await Products.updatePricesById(req.body);
+
+      res.status(200).json({ message: "Precios modificados correctamente" });
     } catch (error) {
       next(error);
     }
