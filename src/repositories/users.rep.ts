@@ -1,6 +1,6 @@
 import { IUserCreation, IUser } from "../interfaces/models/user.interface";
 
-import users from "../DAO/user.dao";
+import users from "@dao/user.dao";
 
 import { filterBuilder } from "@utils/filter-builder.util";
 import { checkErrorType } from "@utils/errors/check-error-type.util";

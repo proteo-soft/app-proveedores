@@ -1,4 +1,4 @@
-import agents from "../DAO/agent.dao";
+import agents from "@dao/agent.dao";
 
 import { filterBuilder } from "@utils/filter-builder.util";
 

@@ -8,6 +8,7 @@
     "@controllers": "./dist/controllers",
     "@services": "./dist/services",
     "@repositories": "./dist/repositories",
+    "@dao": "./dist/DAO",
     "@models": "./dist/models",
     "@interfaces": "./dist/interfaces",
     "@utils": "./dist/utils"

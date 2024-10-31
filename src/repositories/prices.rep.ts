@@ -1,4 +1,4 @@
-import prices from "../DAO/price.dao";
+import prices from "@dao/price.dao";
 
 import List from "../models/list.model";
 import CustomError from "@utils/errors/customError";

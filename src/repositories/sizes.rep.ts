@@ -1,4 +1,4 @@
-import sizes from "../DAO/size.dao";
+import sizes from "@dao/size.dao";
 
 import { filterBuilder } from "@utils/filter-builder.util";
 

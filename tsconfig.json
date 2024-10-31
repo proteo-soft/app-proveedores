@@ -34,6 +34,7 @@
       "@controllers/*": ["./src/controllers/*"],
       "@services/*": ["./src/services/*"],
       "@repositories/*": ["./src/repositories/*"],
+      "@dao/*": ["./src/DAO/*"],
       "@models/*": ["./src/models/*"],
       "@interfaces/*": ["./src/interfaces/*"],
       "@utils/*": ["./src/utils/*"]

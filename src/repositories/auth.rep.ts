@@ -1,6 +1,6 @@
 import { IAuth, IAuthCreation } from "../interfaces/models/auth.interface";
 
-import authDAO from "../DAO/auth.dao";
+import authDAO from "@dao/auth.dao";
 import { checkErrorType } from "@utils/errors/check-error-type.util";
 
 class AuthRepository {
