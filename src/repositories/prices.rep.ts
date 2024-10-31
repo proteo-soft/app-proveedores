@@ -1,19 +1,51 @@
 import prices from "../DAO/price.dao";
-import ProductsRepository from "./products.rep";
 
 import List from "../models/list.model";
 import CustomError from "@utils/errors/customError";
 
 class PricesRepository {
-  static async create(
-    data: { productId: number; listId: number; price: number }[]
+  static async bulkCreate(
+    data: {
+      productId: number;
+      listId: number;
+      price: number;
+    }[]
   ) {
     try {
-      const pricesCreated = await prices.bulkCreate(data);
+      let priceNotModified = false;
 
-      if (!pricesCreated.length)
+      for (const pricesData of data) {
+        const { price, ...where } = pricesData;
+        try {
+          await prices.updateOrCreate(where, { price });
+        } catch {
+          if (!priceNotModified) priceNotModified = true;
+        }
+      }
+
+      if (priceNotModified)
         CustomError.new({
           message: "No se asignaron los precios",
+          statusCode: 400,
+          data: null,
+        });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async create(data: {
+    productId: number;
+    listId: number;
+    price: number;
+  }) {
+    try {
+      const { price, ...where } = data;
+      const pricesCreated = await prices.updateOrCreate(where, { price });
+
+      if (!pricesCreated)
+        CustomError.new({
+          message: "No se asignó el precio",
           statusCode: 400,
           data: null,
         });

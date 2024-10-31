@@ -10,8 +10,6 @@ import ListsRepository from "./lists.rep";
 import PricesRepository from "./prices.rep";
 import StockRepository from "./stock.rep";
 
-import { IProductUpdate } from "../interfaces/models/product.interface";
-
 import { filterBuilder } from "@utils/filter-builder.util";
 import { removeDuplicates } from "@utils/remove-duplicates.util";
 import { checkMissingIds } from "@utils/check-missings";
@@ -236,7 +234,7 @@ class ProductsRepository {
     data: { productId: number; listId: number; price: number }[]
   ) {
     try {
-      await PricesRepository.create(data);
+      await PricesRepository.bulkCreate(data);
     } catch (error) {
       throw checkErrorType(error);
     }

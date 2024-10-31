@@ -66,7 +66,7 @@ export default class ProductsService {
   static async updateById(id: string, data, query) {
     try {
       return await Products.individualBulkUpdateById(
-        [{ ...data, id: parseInt(id) }],
+        [{ ...data, productId: parseInt(id) }],
         query.sucursalId
       );
     } catch (error) {
