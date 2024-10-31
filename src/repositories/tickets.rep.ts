@@ -1,13 +1,13 @@
-import ticketDao from "src/DAO/ticket.dao";
-
 import { filterBuilder } from "@utils/filter-builder.util";
 import { checkErrorType } from "@utils/errors/check-error-type.util";
 import { TicketShape } from "@utils/schemas";
-import productDao from "src/DAO/product.dao";
-import listDao from "src/DAO/list.dao";
-import sucursalDao from "src/DAO/sucursal.dao";
-import userDao from "src/DAO/user.dao";
-import agentDao from "src/DAO/agent.dao";
+
+import ticketDao from "@dao/ticket.dao";
+import productDao from "@dao/product.dao";
+import listDao from "@dao/list.dao";
+import sucursalDao from "@dao/sucursal.dao";
+import userDao from "@dao/user.dao";
+import agentDao from "@dao/agent.dao";
 
 class TicketsRepository {
   static async create(data: TicketShape) {

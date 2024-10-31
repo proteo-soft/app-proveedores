@@ -1,4 +1,4 @@
-import colors from "../DAO/color.dao";
+import colors from "@dao/color.dao";
 
 import { filterBuilder } from "@utils/filter-builder.util";
 

@@ -1,4 +1,4 @@
-import stock from "../DAO/stock.dao";
+import stock from "@dao/stock.dao";
 
 class StockRepository {
   static async create(data: {

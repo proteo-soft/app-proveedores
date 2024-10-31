@@ -1,6 +1,6 @@
 import { Op } from "../database/connect";
 
-import lists from "../DAO/list.dao";
+import lists from "@dao/list.dao";
 
 import { filterBuilder } from "@utils/filter-builder.util";
 import { checkMissingIds } from "@utils/check-missings";

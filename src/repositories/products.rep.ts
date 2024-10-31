@@ -1,9 +1,9 @@
 import { Op } from "../database/connect";
 
-import productsDAO from "../DAO/product.dao";
-import sucursalDAO from "../DAO/sucursal.dao"; // usar el repo de suc
-import stockDAO from "../DAO/stock.dao";
-import priceDao from "../DAO/price.dao";
+import productsDAO from "@dao/product.dao";
+import sucursalDAO from "@dao/sucursal.dao"; // usar el repo de suc
+import stockDAO from "@dao/stock.dao";
+import priceDao from "@dao/price.dao";
 
 import SucursalRepository from "./sucursal.rep";
 import ListsRepository from "./lists.rep";

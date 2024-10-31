@@ -3,7 +3,7 @@ import {
   ISucursal,
 } from "../interfaces/models/sucursal.interface";
 
-import sucursal from "../DAO/sucursal.dao";
+import sucursal from "@dao/sucursal.dao";
 
 import { filterBuilder } from "@utils/filter-builder.util";
 import { checkErrorType } from "@utils/errors/check-error-type.util";
