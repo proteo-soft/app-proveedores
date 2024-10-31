@@ -5,13 +5,24 @@ const router = Router();
 
 router.post("/", ProductsController.create);
 
+router.post("/lists", ProductsController.createList);
+router.get("/lists", ProductsController.getLists);
+router.delete("/lists/:id", ProductsController.deleteListById);
 
-router.post("/list", ProductsController.createList);
-router.delete("/list/:id", ProductsController.deleteListById);
+router.post("/colors", ProductsController.createColors);
+router.get("/colors", ProductsController.getColors);
+router.patch("/colors/:id", ProductsController.updateColorById);
+router.delete("/colors/:id", ProductsController.deleteColorById);
 
-router.post("/:id/prices", ProductsController.setPricesById);
+router.post("/sizes", ProductsController.createSizes);
+router.get("/sizes", ProductsController.getSizes);
+router.patch("/sizes/:id", ProductsController.updateSizeById);
+router.delete("/sizes/:id", ProductsController.deleteSizeById);
+
+router.put("/prices", ProductsController.setPrices);
 router.get("/prices", ProductsController.getPrices);
 router.get("/:id/prices", ProductsController.getPricesById);
+router.patch("/:id/prices", ProductsController.updatePricesById);
 
 router.get("/:id/stock", ProductsController.getStockById);
 

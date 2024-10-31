@@ -1,44 +1,33 @@
 import Products from "../repositories/products.rep";
+import Colors from "../repositories/colors.rep";
+import Sizes from "../repositories/sizes.rep";
 
-import { validateProduct } from "../utils/schemas";
-import { IProductCreation } from "../interfaces/models/product.interface";
+import { validateProduct, validatePrices, PricesShape } from "@utils/schemas";
 
-import CustomError from "../utils/errors/customError";
-import { deleteUndefinedProps } from "../utils/filter-builder.util";
+import CustomError from "@utils/errors/customError";
+import { deleteUndefinedProps } from "@utils/filter-builder.util";
 
 export default class ProductsService {
   static async create(data, opt) {
     try {
-      const result = validateProduct(data);
-      if (!result.success)
-        CustomError.new({
-          message: "La petición contiene campos inválidos",
-          data: result.error,
-          statusCode: 400,
-        });
+      const products: object[] = [];
 
-      return await Products.create({
-        ...result.data,
-        sucursalId: opt.sucursalId,
-      });
-    } catch (error) {
-      throw error;
-    }
-  }
+      for (const product of data.products) {
+        const result = validateProduct(product);
 
-  static async createList(data) {
-    try {
-      //validar
+        if (!result.success)
+          CustomError.new({
+            message: "La petición contiene campos inválidos",
+            data: result.error,
+            statusCode: 400,
+          });
 
-      await Products.createList(data);
-    } catch (error) {
-      throw error;
-    }
-  }
+        products.push(product);
+      }
 
-  static async deleteListById(listId: string) {
-    try {
-      await Products.deleteListById(parseInt(listId));
+      for (const product of products) {
+        await Products.create({ ...product, sucursalId: opt.sucursalId });
+      }
     } catch (error) {
       throw error;
     }
@@ -60,16 +49,140 @@ export default class ProductsService {
     }
   }
 
-  static async update(data) {
+  static async update(data, query) {
     try {
       //validar porque se cuelga cuando hay campos inexistentes
-      return data.type == "individual"
-        ? await Products.individualBulkUpdateById(data.products)
+      data.type == "individual"
+        ? await Products.individualBulkUpdateById(
+            data.products,
+            query.sucursalId
+          )
         : await Products.linealBulkUpdateById(data.where, data.updates);
     } catch (error) {
       throw error;
     }
   }
+
+  static async updateById(id: string, data, query) {
+    try {
+      return await Products.individualBulkUpdateById(
+        [{ ...data, productId: parseInt(id) }],
+        query.sucursalId
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteById(id: string) {
+    try {
+      return await Products.delete(parseInt(id));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // LISTS
+
+  static async createList(data) {
+    try {
+      //validar
+
+      await Products.createList(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getLists(query) {
+    try {
+      return await Products.getLists(query);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteListById(listId: string) {
+    try {
+      await Products.deleteListById(parseInt(listId));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // COLORS
+
+  static async createColor(data) {
+    try {
+      //validar
+
+      await Colors.create(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getColors(query) {
+    try {
+      return await Colors.getAll(query);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async updateColorById(id: string, data) {
+    try {
+      return await Colors.updateById(parseInt(id), data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteColorById(colorId: string) {
+    try {
+      await Colors.deleteById(parseInt(colorId));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // SIZES
+
+  static async createSize(data) {
+    try {
+      //validar
+
+      await Sizes.create(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async updateSizeById(id: string, data) {
+    try {
+      return await Sizes.updateById(parseInt(id), data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getSizes(query) {
+    try {
+      return await Sizes.getAll(query);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteSizeById(sizeId: string) {
+    try {
+      await Sizes.deleteById(parseInt(sizeId));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // STOCK
 
   static async getStockById(productId: string, query) {
     try {
@@ -84,17 +197,26 @@ export default class ProductsService {
     }
   }
 
-  static async setPricesById(productId: string, pricesData) {
-    try {
-      const pricesMapped = pricesData.prices.map((data) => {
-        return {
-          productId: parseInt(productId),
-          listId: data.listId,
-          price: data.price,
-        };
-      });
+  // PRICES
 
-      await Products.setPrices(pricesMapped);
+  static async setPricesById(data) {
+    try {
+      const prices: PricesShape[] = [];
+
+      for (const productPrices of data.prices) {
+        const result = validatePrices(productPrices);
+
+        if (!result.success)
+          CustomError.new({
+            message: "La petición contiene campos inválidos",
+            data: result.error,
+            statusCode: 400,
+          });
+
+        prices.push(productPrices);
+      }
+
+      await Products.setPrices(prices);
     } catch (error) {
       throw error;
     }
@@ -121,17 +243,30 @@ export default class ProductsService {
 
   static async updateById(id: string, data, query) {
     try {
-      return await Products.individualBulkUpdateById([
-        { ...query, ...data, id: parseInt(id) },
-      ]);
+      return await Products.getPrices(query);
     } catch (error) {
       throw error;
     }
   }
 
-  static async deleteById(id: string) {
+  static async updatePricesById(data) {
     try {
-      return await Products.delete(parseInt(id));
+      const prices: PricesShape[] = [];
+
+      for (const productPrices of data.prices) {
+        const result = validatePrices(productPrices);
+
+        if (!result.success)
+          CustomError.new({
+            message: "La petición contiene campos inválidos",
+            data: result.error,
+            statusCode: 400,
+          });
+
+        prices.push(productPrices);
+      }
+
+      await Products.individualBulkUpdateById(prices);
     } catch (error) {
       throw error;
     }

@@ -1,4 +1,4 @@
-import CustomError from "./errors/customError";
+import CustomError from "./customError";
 
 export function checkErrorType(error) {
   try {

@@ -2,8 +2,8 @@ import { IUserCreation, IUser } from "../interfaces/models/user.interface";
 
 import users from "../DAO/user.dao";
 
-import { filterBuilder } from "../utils/filter-builder.util";
-import { checkErrorType } from "../utils/check-error-type.util";
+import { filterBuilder } from "@utils/filter-builder.util";
+import { checkErrorType } from "@utils/errors/check-error-type.util";
 
 class UsersRepository {
   static async getById(id: number) {

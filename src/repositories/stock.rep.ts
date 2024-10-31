@@ -40,7 +40,7 @@ class StockRepository {
     }
   }
 
-  static async updateById(where, data) {
+  static async update(where, data) {
     try {
       return await stock.updateOrCreate(where, data);
     } catch (error) {

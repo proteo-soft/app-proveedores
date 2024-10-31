@@ -1,9 +1,9 @@
 import Users from "../repositories/users.rep";
 
-import { validateUser } from "../utils/schemas";
+import { validateUser } from "@utils/schemas";
 import { IUser, IUserCreation } from "../interfaces/models/user.interface";
 
-import CustomError from "../utils/errors/customError";
+import CustomError from "@utils/errors/customError";
 
 export default class UsersService {
   static async create(data: IUserCreation) {

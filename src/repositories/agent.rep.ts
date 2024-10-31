@@ -1,6 +1,6 @@
 import agents from "../DAO/agent.dao";
 
-import { filterBuilder } from "../utils/filter-builder.util";
+import { filterBuilder } from "@utils/filter-builder.util";
 
 class AgentRepository {
   static async getById(id: number) {

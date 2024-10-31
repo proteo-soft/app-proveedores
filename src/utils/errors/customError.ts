@@ -1,5 +1,5 @@
 class CustomError {
-  static new({ message, data, statusCode }) {
+  static new({ message, statusCode, data }) {
     const error = new Error();
     error["message"] = message;
     error["statusCode"] = statusCode;
