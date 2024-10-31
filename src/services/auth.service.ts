@@ -10,9 +10,9 @@ export default abstract class AuthService {
     }
   }
 
-  static async getById(id: string | number) {
+  static async getByUserId(userId: number) {
     try {
-      return await Auth.getById(id);
+      return await Auth.getByUserId(userId);
     } catch (error) {
       throw error;
     }

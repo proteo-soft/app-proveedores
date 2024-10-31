@@ -85,7 +85,7 @@ passport.use(
           return done(null, false, { message: "Email incorrecto" });
         }
 
-        const { password } = await Auth.getById(user.id);
+        const { password } = await Auth.getByUserId(user.id);
 
         const [storedSalt] = password.split(":");
 
