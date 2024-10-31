@@ -82,7 +82,7 @@ export default class ProductsService {
     }
   }
 
-  // LISTS
+// LISTS
 
   static async createList(data) {
     try {
@@ -241,18 +241,10 @@ export default class ProductsService {
     }
   }
 
-  static async updateById(id: string, data, query) {
-    try {
-      return await Products.getPrices(query);
-    } catch (error) {
-      throw error;
-    }
-  }
-
   static async updatePricesById(data) {
     try {
       const prices: PricesShape[] = [];
-
+      
       for (const productPrices of data.prices) {
         const result = validatePrices(productPrices);
 
