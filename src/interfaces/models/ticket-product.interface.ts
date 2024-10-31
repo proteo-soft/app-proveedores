@@ -1,5 +1,5 @@
 export interface ITicketProductCreation {
-  TicketId: number;
+  ticketId: number;
   productId: number;
   units: number;
 }

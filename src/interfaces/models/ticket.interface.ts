@@ -1,7 +1,8 @@
 export interface ITicketCreation {
-  SucursalId: number;
-  UserId: number;
-  AgentId: number;
+  sucursalId: number;
+  userId: number;
+  agentId: number;
+  listId: number;
   type: string;
 }
 
