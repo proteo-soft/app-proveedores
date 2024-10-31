@@ -45,6 +45,7 @@ class ProductsRepository {
       // ver ventahjas/desventajas de que al crear un producto se cree autoamticamente el stock en todas las sucursales o ir creando de a poco.
 
       if (sucursal) {
+      // ver ventahjas/desventajas de que al crear un producto se cree autoamticamente el stock en todas las sucursales o ir creando de a poco.
         await StockRepository.create({
           stock: units,
           sucursalId: sucursal.id,
@@ -130,6 +131,8 @@ class ProductsRepository {
               stock: units,
             });
 
+            sucursalIds.push(where.sucursalId);
+          
             if (!changed) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla stock
           } catch (error) {
             idsNotModified.push(productData.id);

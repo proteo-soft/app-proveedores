@@ -51,17 +51,17 @@ class ProductsController {
         req.body,
         req.query
       );
-
+      
       res.status(200).json({ data: products });
     } catch (error) {
       next(error);
     }
   }
-
+  
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const products = await Products.deleteById(req.params.id);
-
+      
       res.status(200).json({ data: products });
     } catch (error) {
       next(error);
@@ -239,7 +239,6 @@ class ProductsController {
   }
 
   // STOCK
-
   static async getStockById(req: Request, res: Response, next: NextFunction) {
     try {
       const products = await Products.getStockById(req.params.id, req.query);

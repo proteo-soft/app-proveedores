@@ -241,6 +241,14 @@ export default class ProductsService {
     }
   }
 
+  static async updateById(id: string, data, query) {
+    try {
+      return await Products.getPrices(query);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async updatePricesById(data) {
     try {
       const prices: PricesShape[] = [];
