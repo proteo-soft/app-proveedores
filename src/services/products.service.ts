@@ -82,7 +82,7 @@ export default class ProductsService {
     }
   }
 
-  // LISTS
+// LISTS
 
   static async createList(data) {
     try {
@@ -244,7 +244,7 @@ export default class ProductsService {
   static async updatePricesById(data) {
     try {
       const prices: PricesShape[] = [];
-
+      
       for (const productPrices of data.prices) {
         const result = validatePrices(productPrices);
 
