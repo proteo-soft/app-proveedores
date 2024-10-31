@@ -4,6 +4,8 @@ import productsDAO from "@dao/product.dao";
 import sucursalDAO from "@dao/sucursal.dao"; // usar el repo de suc
 import stockDAO from "@dao/stock.dao";
 import priceDao from "@dao/price.dao";
+import colorDao from "@dao/color.dao";
+import sizeDao from "@dao/size.dao";
 
 import SucursalRepository from "./sucursal.rep";
 import ListsRepository from "./lists.rep";
@@ -73,6 +75,14 @@ class ProductsRepository {
             model: priceDao.model,
             attributes: ["listId", "price"],
           },
+          {
+            model: colorDao.model,
+            attributes: ["name"],
+          },
+          {
+            model: sizeDao.model,
+            attributes: ["name"],
+          },
         ],
       });
     } catch (error) {
@@ -91,6 +101,14 @@ class ProductsRepository {
           {
             model: priceDao.model,
             attributes: ["listId", "price"],
+          },
+          {
+            model: colorDao.model,
+            attributes: ["name"],
+          },
+          {
+            model: sizeDao.model,
+            attributes: ["name"],
           },
         ],
       });

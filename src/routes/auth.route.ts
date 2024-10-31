@@ -14,6 +14,5 @@ const authRouter = Router();
 
 authRouter.post("/signup", passport("register"), Auth.register);
 authRouter.post("/signin", passport("login"), Auth.login);
-authRouter.delete("/cookie", passport("jwt"), Auth.removeToken);
 
 export default authRouter;
