@@ -51,6 +51,10 @@ Stock.belongsTo(Product);
 Sucursal.hasMany(Stock);
 Stock.belongsTo(Sucursal);
 
+// LIST
+
+List.hasMany(Ticket);
+
 // PRICE
 
 Product.belongsToMany(List, {
@@ -64,8 +68,6 @@ Product.hasMany(Price);
 Price.belongsTo(Product);
 List.hasMany(Price);
 Price.belongsTo(List);
-
-Price.hasMany(Ticket);
 
 // TICKET-PRODUCT
 
@@ -85,7 +87,7 @@ Product.belongsTo(Color);
 
 Ticket.belongsTo(Sucursal);
 Ticket.belongsTo(Agent);
-Ticket.belongsTo(Price);
+Ticket.belongsTo(List);
 Ticket.belongsTo(User);
 
 export {

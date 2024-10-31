@@ -1,12 +1,10 @@
 import { Router } from "express";
 import Tickets from "../controllers/tickets.controller";
 
-const ticketsRouter = Router();
+const router = Router();
 
-ticketsRouter.post("/", Tickets.create);
-ticketsRouter.get("/", Tickets.read);
-ticketsRouter.get("/:id", Tickets.readOne);
-ticketsRouter.patch("/:id", Tickets.update);
-ticketsRouter.delete("/:id", Tickets.delete);
+router.post("/", Tickets.create);
 
-export default ticketsRouter;
+router.get("/", Tickets.read);
+
+export default router;

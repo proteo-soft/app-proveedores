@@ -1,13 +1,14 @@
 import sequelize, { DataTypes, Model } from "../database/connect";
 import { ITicketCreation } from "../interfaces/models/ticket.interface";
-import { Sucursal, User, Agent, Price } from "./index.model";
+import { Sucursal, User, Agent, List } from "./index.model";
 
 class Ticket extends Model implements ITicketCreation {
   declare id: number;
-  declare SucursalId: number;
-  declare PriceId: number;
-  declare UserId: number;
-  declare AgentId: number;
+  declare sucursalId: number;
+  declare priceId: number;
+  declare userId: number;
+  declare agentId: number;
+  declare listId: number;
   declare type: string;
 
   // Timestamps
@@ -52,10 +53,10 @@ Ticket.init(
       allowNull: false,
     },
 
-    listPriceId: {
+    listId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Price,
+        model: List,
         key: "id",
       },
       allowNull: false,
@@ -64,7 +65,6 @@ Ticket.init(
     type: {
       type: DataTypes.ENUM,
       values: ["fv", "fc"],
-      defaultValue: "fv",
       allowNull: false,
     },
   },

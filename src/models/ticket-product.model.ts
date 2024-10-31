@@ -5,7 +5,7 @@ import { ITicketProductCreation } from "../interfaces/models/ticket-product.inte
 
 class TicketProduct extends Model implements ITicketProductCreation {
   declare id: number;
-  declare TicketId: number;
+  declare ticketId: number;
   declare productId: number;
   declare units: number;
 

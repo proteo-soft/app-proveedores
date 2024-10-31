@@ -26,7 +26,7 @@ router.patch("/:id/prices", ProductsController.updatePricesById);
 
 router.get("/:id/stock", ProductsController.getStockById);
 
-router.get("/", ProductsController.getAll);
+router.get("/", ProductsController.read);
 router.get("/:id", ProductsController.getById);
 
 router.patch("/", ProductsController.update);

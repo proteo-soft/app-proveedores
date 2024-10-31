@@ -14,7 +14,7 @@ class ProductsController {
     }
   }
 
-  static async getAll(req: Request, res: Response, next: NextFunction) {
+  static async read(req: Request, res: Response, next: NextFunction) {
     try {
       const products = await Products.getAll(req.query);
 
@@ -51,17 +51,17 @@ class ProductsController {
         req.body,
         req.query
       );
-      
+
       res.status(200).json({ data: products });
     } catch (error) {
       next(error);
     }
   }
-  
+
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const products = await Products.deleteById(req.params.id);
-      
+
       res.status(200).json({ data: products });
     } catch (error) {
       next(error);
