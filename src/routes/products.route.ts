@@ -9,12 +9,12 @@ router.post("/lists", ProductsController.createList);
 router.get("/lists", ProductsController.getLists);
 router.delete("/lists/:id", ProductsController.deleteListById);
 
-router.post("/colors", ProductsController.createColors);
+router.post("/colors", ProductsController.createColor);
 router.get("/colors", ProductsController.getColors);
 router.patch("/colors/:id", ProductsController.updateColorById);
 router.delete("/colors/:id", ProductsController.deleteColorById);
 
-router.post("/sizes", ProductsController.createSizes);
+router.post("/sizes", ProductsController.createSize);
 router.get("/sizes", ProductsController.getSizes);
 router.patch("/sizes/:id", ProductsController.updateSizeById);
 router.delete("/sizes/:id", ProductsController.deleteSizeById);
