@@ -70,11 +70,13 @@ class ProductsController {
 
   // COLORS
 
-  static async createColors(req: Request, res: Response, next: NextFunction) {
+  static async createColor(req: Request, res: Response, next: NextFunction) {
     try {
-      await Products.createColor(req.body);
+      const color = await Products.createColor(req.body);
 
-      res.status(201).json({ message: "Color creado exitosamente" });
+      res
+        .status(201)
+        .json({ message: "Color creado exitosamente", data: color });
     } catch (error) {
       next(error);
     }
@@ -120,11 +122,13 @@ class ProductsController {
 
   // SIZES
 
-  static async createSizes(req: Request, res: Response, next: NextFunction) {
+  static async createSize(req: Request, res: Response, next: NextFunction) {
     try {
-      await Products.createSize(req.body);
+      const size = await Products.createSize(req.body);
 
-      res.status(201).json({ message: "Talle creado exitosamente" });
+      res
+        .status(201)
+        .json({ message: "Talle creado exitosamente", data: size });
     } catch (error) {
       next(error);
     }
@@ -164,9 +168,11 @@ class ProductsController {
 
   static async createList(req: Request, res: Response, next: NextFunction) {
     try {
-      await Products.createList(req.body);
+      const list = await Products.createList(req.body);
 
-      res.status(201).json({ message: "Lista creada exitosamente" });
+      res
+        .status(201)
+        .json({ message: "Lista creada exitosamente", data: list });
     } catch (error) {
       next(error);
     }

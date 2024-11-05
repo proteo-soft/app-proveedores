@@ -66,7 +66,7 @@ export default class ProductsService {
   static async updateById(id: string, data, query) {
     try {
       return await Products.individualBulkUpdateById(
-        [{ ...data, productId: parseInt(id) }],
+        [{ ...data, id: parseInt(id) }],
         query.sucursalId
       );
     } catch (error) {
@@ -82,13 +82,13 @@ export default class ProductsService {
     }
   }
 
-// LISTS
+  // LISTS
 
   static async createList(data) {
     try {
       //validar
 
-      await Products.createList(data);
+      return await Products.createList(data);
     } catch (error) {
       throw error;
     }
@@ -116,7 +116,7 @@ export default class ProductsService {
     try {
       //validar
 
-      await Colors.create(data);
+      return await Colors.create(data);
     } catch (error) {
       throw error;
     }
@@ -152,7 +152,7 @@ export default class ProductsService {
     try {
       //validar
 
-      await Sizes.create(data);
+      return await Sizes.create(data);
     } catch (error) {
       throw error;
     }
@@ -244,7 +244,7 @@ export default class ProductsService {
   static async updatePricesById(data) {
     try {
       const prices: PricesShape[] = [];
-      
+
       for (const productPrices of data.prices) {
         const result = validatePrices(productPrices);
 

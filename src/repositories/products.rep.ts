@@ -54,6 +54,8 @@ class ProductsRepository {
           productId: newProduct.id,
         });
       }
+
+      return newProduct;
     } catch (error) {
       throw checkErrorType(error);
     }
@@ -131,12 +133,12 @@ class ProductsRepository {
           stock: units,
           listId,
           price,
-          productId,
+          id: productId,
           ...productData
         } = product;
 
         if (units) {
-          const where = { sucursalId, productId: productData.id };
+          const where = { sucursalId, productId };
 
           if (!sucursalExists) {
             // valido si existe esa sucursal antes de agregar/modificar
@@ -149,9 +151,9 @@ class ProductsRepository {
               stock: units,
             });
 
-            if (!changed) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla stock
+            if (!changed) idsNotModified.push(productId); // agrego los ids no modificados de la tabla stock
           } catch (error) {
-            idsNotModified.push(productData.id);
+            idsNotModified.push(productId);
           }
         }
 
@@ -169,9 +171,9 @@ class ProductsRepository {
               price,
             });
 
-            if (!changed) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla prices
+            if (!changed) idsNotModified.push(productId); // agrego los ids no modificados de la tabla prices
           } catch (error) {
-            idsNotModified.push(productData.id);
+            idsNotModified.push(productId);
           }
         }
 
@@ -182,15 +184,13 @@ class ProductsRepository {
           { id: productId },
           productData
         );
-        if (!affected) idsNotModified.push(productData.id); // agrego los ids no modificados de la tabla products
+        if (!affected) idsNotModified.push(productId); // agrego los ids no modificados de la tabla products
       }
 
-      const parsedIds = removeDuplicates(idsNotModified); // saco los ids duplicados
-
-      if (parsedIds.length) {
+      if (idsNotModified.length) {
         CustomError.new({
           message: "Algunos datos no se actualizaron",
-          data: parsedIds,
+          data: removeDuplicates(idsNotModified), // saco los ids duplicados
           statusCode: 404,
         });
       }
@@ -235,7 +235,7 @@ class ProductsRepository {
 
   static async createList(data) {
     try {
-      await ListsRepository.create(data);
+      return await ListsRepository.create(data);
     } catch (error) {
       throw checkErrorType(error);
     }
